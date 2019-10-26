@@ -11,8 +11,8 @@ import org.json.JSONObject
 
 class RegisterActivity : AppCompatActivity() {
 
-    //val urlServidor = "https://polar-stream-82449.herokuapp.com"
-    val urlServidor = "http://192.168.0.4:5000"
+    val urlServidor = "https://polar-stream-82449.herokuapp.com"
+    //val urlServidor = "http://192.168.0.4:5000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

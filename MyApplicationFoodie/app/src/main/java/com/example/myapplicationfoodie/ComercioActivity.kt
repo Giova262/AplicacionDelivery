@@ -5,16 +5,15 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import org.json.JSONArray
 
 class ComercioActivity : AppCompatActivity() {
 
     var tokenUsario :String = "-1"
-    //val urlServidor = "https://polar-stream-82449.herokuapp.com"
-    val urlServidor = "http://192.168.0.4:5000"
+    val urlServidor = "https://polar-stream-82449.herokuapp.com"
+    //val urlServidor = "http://192.168.0.4:5000"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,55 +23,51 @@ class ComercioActivity : AppCompatActivity() {
         //.....................Recibo datos ....................................
 
          val objetoIntent : Intent =intent
-         val datos: JSONArray = JSONArray( objetoIntent.getStringExtra("datos") )
+         val comercios: JSONArray = JSONArray( objetoIntent.getStringExtra("datos") )
          tokenUsario = objetoIntent.getStringExtra("token")
 
 
+        var listView = findViewById<ListView>(R.id.comercio_listview)
+
         //.........................................................................
 
+        val list = ArrayList<String>()
 
-        //.....................Obtengo elementos..................................
+        for (i in 0 until comercios.length()) {
 
-        var listaBotones = findViewById<LinearLayout>(R.id.comercios_Layout)
+            val jsonObject1 = comercios.getJSONObject(i)
+            val value1 = jsonObject1.getString("com_nombre")
 
-        //........................................................................
+            list.add(value1)
+        }
 
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1, android.R.id.text1, list
+        )
 
-        //....................Creacion de botones por comercios....................
+        listView.setAdapter(adapter)
 
-        for (i in 0 until datos.length()) {
+        listView.onItemClickListener = object : AdapterView.OnItemClickListener {
 
-            val jsonObject1 = datos.getJSONObject(i)
-            val value0 = jsonObject1.getString("com_nombre")
-            val value1 = jsonObject1.getString("com_direccion")
-            val value2 = jsonObject1.getString("com_descripcion")
-            val value3 = jsonObject1.getDouble("com_latitud")
-            val value4 = jsonObject1.getDouble("com_longitud")
-            val value5 = jsonObject1.getInt("com_estado")
-            val value6 = jsonObject1.getInt("com_id")
+            override fun onItemClick(
+                parent: AdapterView<*>, view: View,
+                position: Int, id: Long
+            ) {
 
-            val myButton = Button(this)
-
-            myButton.setText(value0)
-            myButton.setBackgroundColor(Color.parseColor("#18649E"))
-            myButton.setTextColor(Color.parseColor("#F7F4F4"))
-            myButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, (24).toFloat() )
-
-            myButton?.setOnClickListener {
+                val jsonObject1 = comercios.getJSONObject(position)
+                val value6 = jsonObject1.getInt("com_id")
 
                 pantalla_productos( value6 )
+
             }
 
-
-            listaBotones.addView(myButton)
-
         }
+
     }
 
 
     private fun pantalla_productos( datos :Int ) {
-
-       // mensaje_Toast( datos.toString() )
 
         val intent:Intent = Intent(this,ProductoActivity::class.java)
         intent.putExtra("idcomercio",datos)

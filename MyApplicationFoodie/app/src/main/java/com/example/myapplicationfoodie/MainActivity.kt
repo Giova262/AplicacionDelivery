@@ -173,8 +173,8 @@ class MainActivity : AppCompatActivity() {
     private fun enviarDatosAlServidor(jsonObject: JSONObject) {
 
         val queue = Volley.newRequestQueue( this )
-       // val url = "https://polar-stream-82449.herokuapp.com/api/user/login"
-        val url = urlServidor.plus("/api/user/login")
+        val url = "https://polar-stream-82449.herokuapp.com/api/user/login"
+        //val url = urlServidor.plus("/api/user/login")
 
 
         val jsonObjectRequest = JsonObjectRequest(url, jsonObject,
@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity() {
                 if(status == 1){
 
                     val datos = jsonob.getJSONObject("dato")
-                    //mensaje_Toast(datos.toString())
+
                     //.........Ahora veo si mando al login de usuario o de delivery
                     pantalla_login( datos.toString() )
 

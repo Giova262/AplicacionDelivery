@@ -14,8 +14,8 @@ import org.json.JSONObject
 class LoginActivity : AppCompatActivity() {
 
     var tokenUsario :String = "-1"
-    //val urlServidor = "https://polar-stream-82449.herokuapp.com"
-    val urlServidor = "http://192.168.0.4:5000"
+    val urlServidor = "https://polar-stream-82449.herokuapp.com"
+    //val urlServidor = "http://192.168.0.4:5000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,8 +105,6 @@ class LoginActivity : AppCompatActivity() {
         val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
 
             Response.Listener<String> { response ->
-
-                mensaje_Toast("Recibi mensaje del servidor")
 
                 var strResp = response.toString()
                 val jsonob: JSONObject = JSONObject(strResp)
