@@ -25,7 +25,29 @@
         <ListView
             android:id="@+id/producto_listview"
             android:layout_width="420dp"
-            android:layout_height="580dp" />
+            android:layout_height="331dp" />
+
+        <Button
+            android:id="@+id/producto_verbolsaButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="50dp"
+            android:background="#18649E"
+            android:textColor="#F7F4F4"
+            android:textSize="24dp"
+            android:text="Ver bolsa" />
+
+        <Button
+            android:id="@+id/producto_confirmarButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="50dp"
+            android:background="#18649E"
+            android:textColor="#F7F4F4"
+            android:textSize="24dp"
+            android:text="Confirmar comra" />
     </LinearLayout>
 
 

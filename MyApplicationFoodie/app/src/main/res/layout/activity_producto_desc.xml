@@ -75,5 +75,16 @@
             android:textSize="24dp"
             android:text="Agregar" />
 
+        <Button
+            android:id="@+id/productoDesc_volverButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="100dp"
+            android:layout_marginVertical="50dp"
+            android:background="#18649E"
+            android:text="Volver"
+            android:textColor="#F7F4F4"
+            android:textSize="24dp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

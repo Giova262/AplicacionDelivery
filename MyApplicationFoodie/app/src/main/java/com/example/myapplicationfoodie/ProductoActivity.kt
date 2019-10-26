@@ -22,29 +22,83 @@ import android.os.Parcelable
 import android.widget.TextView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-
+import org.json.JSONArray
 
 
 class ProductoActivity : AppCompatActivity() {
 
     var tokenUsario :String = "-1"
+    var idComercio :Int = -1
+    var bolsaDeCompra = ArrayList<String>()
+    lateinit var productos :JSONArray
+
     val urlServidor = "https://polar-stream-82449.herokuapp.com"
     //val urlServidor = "http://192.168.0.4:5000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_producto)
 
         //.....................Recibo datos ....................................
 
         val objetoIntent : Intent =intent
-        val idComercio = objetoIntent.getIntExtra("idcomercio", 0)
+
+        if( objetoIntent.getStringExtra("activdad") == "ProductosDesc" ){
+
+            bolsaDeCompra = objetoIntent.getStringArrayListExtra("bolsa")
+        }else{
+
+            bolsaDeCompra.clear()
+        }
+
+        idComercio = objetoIntent.getIntExtra("idComercio", 0)
         tokenUsario = objetoIntent.getStringExtra("token")
+
+        //...........Obtengo Elementos.............................................
+
+        var verBolsaButton = findViewById<Button>(R.id.producto_verbolsaButton)
+        var confirmarButton = findViewById<Button>(R.id.producto_confirmarButton)
 
         //...........................................................................
 
+
         enviarDatosAlServidor(idComercio)
 
+
+        //..........................................................................
+
+        verBolsaButton?.setOnClickListener {
+            pantalla_bolsaDeProductos()
+        }
+
+        confirmarButton?.setOnClickListener {
+            confirmar_compra()
+        }
+
+    }
+
+    private fun confirmar_compra() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun pantalla_bolsaDeProductos() {
+
+        val intent:Intent = Intent(this,BolsadeProductosActivity::class.java)
+
+       /* val list = ArrayList<String>()
+
+        for (i in 0 until productos.length()) {
+
+            val jsonObject1 = productos.getJSONObject(i)
+            val value0 = jsonObject1.getString("prod_nombre")
+
+            list.add(value0)
+        }*/
+
+        intent.putExtra("bolsa",bolsaDeCompra)
+
+        startActivity(intent)
     }
 
     private fun mensaje_Toast(s: String) {
@@ -89,7 +143,7 @@ class ProductoActivity : AppCompatActivity() {
     private fun fillList(jsonob: JSONObject) {
 
 
-        var productos= jsonob.getJSONArray("data")
+        productos= jsonob.getJSONArray("data")
 
         var listView = findViewById<ListView>(R.id.producto_listview)
 
@@ -121,20 +175,20 @@ class ProductoActivity : AppCompatActivity() {
 
                 pantalla_productosDec(jsonObject1.toString())
 
-
             }
-
         }
-
     }
 
-    private fun pantalla_productosDec( datos :String ) {
+    private fun pantalla_productosDec( productos :String ) {
 
         val intent:Intent = Intent(this,ProductoDescActivity::class.java)
-        intent.putExtra("producto",datos)
+
+        intent.putExtra("producto",productos)
         intent.putExtra("token",tokenUsario)
+        intent.putExtra("idComercio",idComercio)
+        intent.putExtra("bolsa",bolsaDeCompra)
         startActivity(intent)
-        //finish()
+        finish()
     }
 }
 

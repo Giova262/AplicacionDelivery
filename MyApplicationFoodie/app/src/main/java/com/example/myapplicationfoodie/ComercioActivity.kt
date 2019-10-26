@@ -67,11 +67,12 @@ class ComercioActivity : AppCompatActivity() {
     }
 
 
-    private fun pantalla_productos( datos :Int ) {
+    private fun pantalla_productos( idcomercio :Int ) {
 
         val intent:Intent = Intent(this,ProductoActivity::class.java)
-        intent.putExtra("idcomercio",datos)
+        intent.putExtra("idComercio",idcomercio)
         intent.putExtra("token",tokenUsario)
+        intent.putExtra("activdad","Comercio")
         startActivity(intent)
         //finish()
     }
