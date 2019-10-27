@@ -1,8 +1,6 @@
 package com.example.myapplicationfoodie
 
 import android.content.Intent
-import android.location.Address
-import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -32,32 +30,14 @@ class MainActivity : AppCompatActivity() {
     val jsonObject = JSONObject()
     private var rolDelUsuario = 0
 
-    var coder = Geocoder(this)
 
-    //val urlServidor = "https://polar-stream-82449.herokuapp.com"
-    val urlServidor = "http://192.168.0.4:5000"
+    val urlServidor = "https://polar-stream-82449.herokuapp.com"
+    //val urlServidor = "http://192.168.0.4:5000"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        //................................
-
-        var address:List<Address> = coder.getFromLocationName("buenos aires",5)
-
-        if (address.isNotEmpty()) {
-            val latitude = address.get(0).getLatitude()
-            val longitude = address.get(0).getLongitude()
-
-            mensaje_Toast("Latitud de buenos aires : ${latitude} y la longitud es : ${longitude}")
-            
-        }
-
-
-        //.................................
-
 
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
@@ -196,8 +176,8 @@ class MainActivity : AppCompatActivity() {
     private fun enviarDatosAlServidor(jsonObject: JSONObject) {
 
         val queue = Volley.newRequestQueue( this )
-        val url = "https://polar-stream-82449.herokuapp.com/api/user/login"
-        //val url = urlServidor.plus("/api/user/login")
+        //val url = "https://polar-stream-82449.herokuapp.com/api/user/login"
+        val url = urlServidor.plus("/api/user/login")
 
 
         val jsonObjectRequest = JsonObjectRequest(url, jsonObject,
@@ -230,6 +210,7 @@ class MainActivity : AppCompatActivity() {
                 //......................................................
             },
             Response.ErrorListener { error ->
+
 
                 error.printStackTrace()
             }

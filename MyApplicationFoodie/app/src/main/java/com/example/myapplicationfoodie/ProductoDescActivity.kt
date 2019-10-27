@@ -12,6 +12,12 @@ class ProductoDescActivity : AppCompatActivity() {
     var idComercio :Int = -1
     var bolsaDeCompra = ArrayList<String>()
     lateinit var producto: JSONObject
+    lateinit var datosUsuario:String
+
+    var idUsuario: Int = 0
+    var dirInicio: String = ""
+    var latInicio: Double = 0.0
+    var longInicio: Double = 0.0
 
     val urlServidor = "https://polar-stream-82449.herokuapp.com"
     //val urlServidor = "http://192.168.0.4:5000"
@@ -28,6 +34,13 @@ class ProductoDescActivity : AppCompatActivity() {
         tokenUsario = objetoIntent.getStringExtra("token")
         idComercio = objetoIntent.getIntExtra("idComercio", 0)
         bolsaDeCompra = objetoIntent.getStringArrayListExtra("bolsa")
+
+        idUsuario = objetoIntent.getIntExtra("idUsuario",0)
+        dirInicio  = objetoIntent.getStringExtra("dirInicio")
+        latInicio  = objetoIntent.getDoubleExtra("latInicio",0.0)
+        longInicio  = objetoIntent.getDoubleExtra("longInicio",0.0)
+        datosUsuario = objetoIntent.getStringExtra("userData")
+
 
 
         //...........Obtengo Elementos.............................................
@@ -86,6 +99,14 @@ class ProductoDescActivity : AppCompatActivity() {
         intent.putExtra("token",tokenUsario)
         intent.putExtra("activdad","ProductosDesc")
         intent.putExtra("bolsa",bolsaDeCompra)
+
+        intent.putExtra("dirInicio",dirInicio)
+        intent.putExtra("latInicio",latInicio)
+        intent.putExtra("longInicio",longInicio)
+        intent.putExtra("idUsuario",idUsuario)
+
+        intent.putExtra("userData",datosUsuario)
+
         startActivity(intent)
         finish()
     }

@@ -12,6 +12,14 @@ import org.json.JSONArray
 class ComercioActivity : AppCompatActivity() {
 
     var tokenUsario :String = "-1"
+
+    var idUsuario: Int = 0
+    var dirInicio: String = ""
+    var latInicio: Double = 0.0
+    var longInicio: Double = 0.0
+    lateinit var datosUsuario:String
+
+
     val urlServidor = "https://polar-stream-82449.herokuapp.com"
     //val urlServidor = "http://192.168.0.4:5000"
 
@@ -23,13 +31,17 @@ class ComercioActivity : AppCompatActivity() {
         //.....................Recibo datos ....................................
 
          val objetoIntent : Intent =intent
+
          val comercios: JSONArray = JSONArray( objetoIntent.getStringExtra("datos") )
          tokenUsario = objetoIntent.getStringExtra("token")
+         idUsuario =  objetoIntent.getIntExtra("iduser",0)
+         datosUsuario = objetoIntent.getStringExtra("userData")
 
 
-        var listView = findViewById<ListView>(R.id.comercio_listview)
 
         //.........................................................................
+
+        var listView = findViewById<ListView>(R.id.comercio_listview)
 
         val list = ArrayList<String>()
 
@@ -56,9 +68,14 @@ class ComercioActivity : AppCompatActivity() {
             ) {
 
                 val jsonObject1 = comercios.getJSONObject(position)
-                val value6 = jsonObject1.getInt("com_id")
 
-                pantalla_productos( value6 )
+                val value0 = jsonObject1.getInt("com_id")
+                dirInicio = jsonObject1.getString("com_direccion")
+                latInicio = jsonObject1.getDouble("com_latitud")
+                longInicio = jsonObject1.getDouble("com_longitud")
+
+
+                pantalla_productos( value0 )
 
             }
 
@@ -70,7 +87,14 @@ class ComercioActivity : AppCompatActivity() {
     private fun pantalla_productos( idcomercio :Int ) {
 
         val intent:Intent = Intent(this,ProductoActivity::class.java)
+
         intent.putExtra("idComercio",idcomercio)
+        intent.putExtra("dirInicio",dirInicio)
+        intent.putExtra("latInicio",latInicio)
+        intent.putExtra("longInicio",longInicio)
+        intent.putExtra("idUsuario",idUsuario)
+        intent.putExtra("userData",datosUsuario)
+
         intent.putExtra("token",tokenUsario)
         intent.putExtra("activdad","Comercio")
         startActivity(intent)

@@ -13,6 +13,7 @@ import org.json.JSONObject
 class BolsadeProductosActivity : AppCompatActivity() {
 
     var bolsaDeCompra = ArrayList<String>()
+    lateinit var datosUsuario:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,7 @@ class BolsadeProductosActivity : AppCompatActivity() {
 
         val objetoIntent : Intent =intent
         bolsaDeCompra = objetoIntent.getStringArrayListExtra("bolsa")
+        datosUsuario = objetoIntent.getStringExtra("userData")
 
 
         //...........................................................

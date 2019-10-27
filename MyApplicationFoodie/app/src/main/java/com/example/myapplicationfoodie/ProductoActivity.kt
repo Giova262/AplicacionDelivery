@@ -17,11 +17,14 @@ import android.widget.AdapterView.OnItemClickListener
 import android.R.string.ok
 import android.R.string.no
 import android.R.attr.label
+import android.location.Address
+import android.location.Geocoder
 import android.os.Parcel
 import android.os.Parcelable
 import android.widget.TextView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONArray
 
 
@@ -29,8 +32,17 @@ class ProductoActivity : AppCompatActivity() {
 
     var tokenUsario :String = "-1"
     var idComercio :Int = -1
+
+    var idUsuario: Int = 0
+    var dirInicio: String = ""
+    var latInicio: Double = 0.0
+    var longInicio: Double = 0.0
+
+    lateinit var datosUsuario:String
+
     var bolsaDeCompra = ArrayList<String>()
     lateinit var productos :JSONArray
+    var coder = Geocoder(this)
 
     val urlServidor = "https://polar-stream-82449.herokuapp.com"
     //val urlServidor = "http://192.168.0.4:5000"
@@ -47,13 +59,23 @@ class ProductoActivity : AppCompatActivity() {
         if( objetoIntent.getStringExtra("activdad") == "ProductosDesc" ){
 
             bolsaDeCompra = objetoIntent.getStringArrayListExtra("bolsa")
+
         }else{
 
             bolsaDeCompra.clear()
+
         }
 
         idComercio = objetoIntent.getIntExtra("idComercio", 0)
         tokenUsario = objetoIntent.getStringExtra("token")
+
+        idUsuario = objetoIntent.getIntExtra("idUsuario",0)
+        dirInicio  = objetoIntent.getStringExtra("dirInicio")
+        latInicio  = objetoIntent.getDoubleExtra("latInicio",0.0)
+        longInicio  = objetoIntent.getDoubleExtra("longInicio",0.0)
+        datosUsuario = objetoIntent.getStringExtra("userData")
+
+
 
         //...........Obtengo Elementos.............................................
 
@@ -62,9 +84,7 @@ class ProductoActivity : AppCompatActivity() {
 
         //...........................................................................
 
-
         enviarDatosAlServidor(idComercio)
-
 
         //..........................................................................
 
@@ -80,35 +100,89 @@ class ProductoActivity : AppCompatActivity() {
 
     private fun confirmar_compra() {
 
-      /*
-      *  {
-      * "iduser": "1" ,
- 	"diri":"sarasa 11 3b",
- 	"dirf":"paseo colon 11re",
- 	"lati":"-45.1",
- 	"longi":"-50.1",
- 	"latf":"-43.1",
- 	"longf":"-52.1",
- 	"items": [
-                    {
-                        "id": "1",
-                        "cantidad": "2"
-                    },
+        var list = JSONArray()
 
-                    {
-                        "id": "2",
-                        "cantidad": "4"
-                    },
+        for (i in 0 until bolsaDeCompra.size) {
 
-                    {
-                        "id": "3",
-                        "cantidad": "3"
+            val jsonob: JSONObject = JSONObject(bolsaDeCompra[i])
+            list.put(jsonob)
+        }
+
+        //................................
+
+        var direccionEdittext = findViewById<EditText>(R.id.producto_direccionEditText)
+        var direccionString = direccionEdittext.text
+
+        if( direccionString.isNotEmpty()){
+
+            var address:List<Address> = coder.getFromLocationName( direccionString.toString() ,5)
+
+            if (address.isNotEmpty()) {
+
+                val latitude = address.get(0).getLatitude()
+                val longitude = address.get(0).getLongitude()
+
+
+                val objetoJson= JSONObject()
+
+                objetoJson.put("iduser", idUsuario )
+                objetoJson.put("diri", dirInicio )
+                objetoJson.put("dirf", direccionString )
+                objetoJson.put("lati", latInicio )
+                objetoJson.put("longi", longInicio )
+                objetoJson.put("latf", latitude )
+                objetoJson.put("longf", longitude )
+                objetoJson.put("items", list )
+
+
+                //...............Mando al servidor............................
+
+                val url = urlServidor.plus("/api/pedido/registrarPedido" )
+
+
+                val queue = Volley.newRequestQueue( this )
+                val jsonObjectRequest = object: JsonObjectRequest( Request.Method.POST, url,objetoJson,
+
+                    Response.Listener<JSONObject> { response ->
+
+                        pantalla_login()
+                        //mensaje_Toast(response.toString())
+
+                    },
+                    Response.ErrorListener {
+                        mensaje_Toast("Ocurrio un Error!")
+                    })
+
+                {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val headers = HashMap<String, String>()
+                        headers["Authorization"] = "Basic <<YOUR BASE64 USER:PASS>>"
+                        headers["Content-Type"] = "application/json; charset=UTF-8"
+                        headers["token"] = tokenUsario
+
+                        return headers
                     }
-                ]
-}
-      *
-      * */
+                }
 
+                queue.add(jsonObjectRequest)
+
+            }
+
+        }else{
+            mensaje_Toast( "Ingresa tu Direccion Primero!" )
+        }
+
+
+    }
+
+    private fun pantalla_login() {
+
+        val intent:Intent = Intent(this,LoginActivity::class.java)
+        //intent.putExtra("datos","{}")
+        intent.putExtra("token",tokenUsario)
+        intent.putExtra("datos",datosUsuario)
+
+        startActivity(intent)
     }
 
     private fun pantalla_bolsaDeProductos() {
@@ -116,6 +190,7 @@ class ProductoActivity : AppCompatActivity() {
         val intent:Intent = Intent(this,BolsadeProductosActivity::class.java)
 
         intent.putExtra("bolsa",bolsaDeCompra)
+        intent.putExtra("userData",datosUsuario)
 
         startActivity(intent)
     }
@@ -125,7 +200,6 @@ class ProductoActivity : AppCompatActivity() {
     }
 
     private fun enviarDatosAlServidor( idcomecio: Int ) {
-
 
         val url = urlServidor.plus("/api/producto/productosPorComercio/"+ idcomecio.toString() )
 
@@ -206,6 +280,14 @@ class ProductoActivity : AppCompatActivity() {
         intent.putExtra("token",tokenUsario)
         intent.putExtra("idComercio",idComercio)
         intent.putExtra("bolsa",bolsaDeCompra)
+
+        intent.putExtra("dirInicio",dirInicio)
+        intent.putExtra("latInicio",latInicio)
+        intent.putExtra("longInicio",longInicio)
+        intent.putExtra("idUsuario",idUsuario)
+
+        intent.putExtra("userData",datosUsuario)
+
         startActivity(intent)
         finish()
     }

@@ -14,6 +14,9 @@ import org.json.JSONObject
 class LoginActivity : AppCompatActivity() {
 
     var tokenUsario :String = "-1"
+    var idUsuario: Int = 0
+    lateinit var datosUsuario :JSONObject
+
     val urlServidor = "https://polar-stream-82449.herokuapp.com"
     //val urlServidor = "http://192.168.0.4:5000"
 
@@ -24,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
         //.....................Recibo datos ....................................
 
         val objetoIntent : Intent=intent
-        val datos: JSONObject = JSONObject( objetoIntent.getStringExtra("datos") )
+        datosUsuario = JSONObject( objetoIntent.getStringExtra("datos") )
         tokenUsario = objetoIntent.getStringExtra("token")
 
 
@@ -51,11 +54,14 @@ class LoginActivity : AppCompatActivity() {
 
         //................Muestro datos del cliente...............................
 
+        idUsuario = datosUsuario.getInt("id")
+
+
         mensajeTextView.setText("Bienvenido! Elija Pedir para encontrar lo que buscas!")
-        nombreTextView.setText( "Nombre: " + datos.getString("nombre"))
-        emailTextView.setText( "Email: " + datos.getString("mail"))
-        nivelTextView.setText( "Nivel: " + datos.getString("nivel"))
-        puntajeTextView.setText( "Puntaje: " + datos.getString("puntaje"))
+        nombreTextView.setText( "Nombre: " + datosUsuario.getString("nombre"))
+        emailTextView.setText( "Email: " + datosUsuario.getString("mail"))
+        nivelTextView.setText( "Nivel: " + datosUsuario.getString("nivel"))
+        puntajeTextView.setText( "Puntaje: " + datosUsuario.getString("puntaje"))
 
         imagenTextView.setImageDrawable(getResources().getDrawable(R.drawable.user));
 
@@ -87,10 +93,13 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun pantalla_pedir( datos :String ) {
+    private fun pantalla_pedir( comercios :String ) {
         val intent:Intent = Intent(this,ComercioActivity::class.java)
-        intent.putExtra("datos",datos)
+        intent.putExtra("datos",comercios)
+        intent.putExtra("iduser",idUsuario)
         intent.putExtra("token",tokenUsario)
+        intent.putExtra("userData",datosUsuario.toString())
+
         startActivity(intent)
         finish()
     }

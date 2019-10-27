@@ -22,16 +22,27 @@
             android:textColor="#A3E926"
             android:textSize="18dp" />
 
+        <EditText
+            android:id="@+id/producto_direccionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:hint="Ingrese Direccion de Destino"
+            android:inputType="textPostalAddress"
+            android:selectAllOnFocus="false" />
+
         <ListView
             android:id="@+id/producto_listview"
             android:layout_width="420dp"
-            android:layout_height="331dp" />
+            android:layout_height="200dp" />
 
         <Button
             android:id="@+id/producto_verbolsaButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="1dp"
             android:layout_marginHorizontal="50dp"
             android:background="#18649E"
             android:textColor="#F7F4F4"
