@@ -37,7 +37,7 @@ class BolsadeProductosActivity : AppCompatActivity() {
 
 
     private fun fillList() {
-        
+
         var listView = findViewById<ListView>(R.id.bolsa_listview)
 
         val list = ArrayList<String>()
@@ -65,12 +65,11 @@ class BolsadeProductosActivity : AppCompatActivity() {
                 position: Int, id: Long
             ) {
 
-               // val jsonObject1 = productos.getJSONObject(position)
-
-                //pantalla_productosDec(jsonObject1.toString())
 
             }
         }
+
+
     }
 
 }

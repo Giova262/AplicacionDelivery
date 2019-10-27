@@ -79,22 +79,41 @@ class ProductoActivity : AppCompatActivity() {
     }
 
     private fun confirmar_compra() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+      /*
+      *  {
+      * "iduser": "1" ,
+ 	"diri":"sarasa 11 3b",
+ 	"dirf":"paseo colon 11re",
+ 	"lati":"-45.1",
+ 	"longi":"-50.1",
+ 	"latf":"-43.1",
+ 	"longf":"-52.1",
+ 	"items": [
+                    {
+                        "id": "1",
+                        "cantidad": "2"
+                    },
+
+                    {
+                        "id": "2",
+                        "cantidad": "4"
+                    },
+
+                    {
+                        "id": "3",
+                        "cantidad": "3"
+                    }
+                ]
+}
+      *
+      * */
+
     }
 
     private fun pantalla_bolsaDeProductos() {
 
         val intent:Intent = Intent(this,BolsadeProductosActivity::class.java)
-
-       /* val list = ArrayList<String>()
-
-        for (i in 0 until productos.length()) {
-
-            val jsonObject1 = productos.getJSONObject(i)
-            val value0 = jsonObject1.getString("prod_nombre")
-
-            list.add(value0)
-        }*/
 
         intent.putExtra("bolsa",bolsaDeCompra)
 
