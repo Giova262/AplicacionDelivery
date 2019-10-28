@@ -177,10 +177,14 @@ class ProductoActivity : AppCompatActivity() {
 
     private fun pantalla_login() {
 
+
+        mensaje_Toast("Tu Pedido realizado Exitosamente! ")
         val intent:Intent = Intent(this,LoginActivity::class.java)
         //intent.putExtra("datos","{}")
         intent.putExtra("token",tokenUsario)
         intent.putExtra("datos",datosUsuario)
+
+
 
         startActivity(intent)
     }
