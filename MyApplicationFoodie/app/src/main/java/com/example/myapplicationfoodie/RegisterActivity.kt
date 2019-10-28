@@ -11,8 +11,6 @@ import org.json.JSONObject
 
 class RegisterActivity : AppCompatActivity() {
 
-    val urlServidor = "https://polar-stream-82449.herokuapp.com"
-    //val urlServidor = "http://192.168.0.4:5000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,8 +99,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun pantalla_loginDelivery() {
-        val intent:Intent = Intent(this,LoginActivity::class.java)
-        startActivity(intent)
+        /*val intent:Intent = Intent(this,LoginActivity::class.java)
+        startActivity(intent)*/
     }
 
     private fun pantalla_loginUsuario() {
@@ -118,7 +116,7 @@ class RegisterActivity : AppCompatActivity() {
 
         val queue = Volley.newRequestQueue( this )
         //val url = "https://polar-stream-82449.herokuapp.com/api/user/register"
-        val url = urlServidor.plus("/api/user/register")
+        val url = config.URL.plus("/api/user/register")
 
 
         val jsonObjectRequest = JsonObjectRequest(url, jsonObject,

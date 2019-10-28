@@ -31,10 +31,6 @@ class MainActivity : AppCompatActivity() {
     private var rolDelUsuario = 0
 
 
-    val urlServidor = "https://polar-stream-82449.herokuapp.com"
-    //val urlServidor = "http://192.168.0.4:5000"
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -176,9 +172,7 @@ class MainActivity : AppCompatActivity() {
     private fun enviarDatosAlServidor(jsonObject: JSONObject) {
 
         val queue = Volley.newRequestQueue( this )
-        //val url = "https://polar-stream-82449.herokuapp.com/api/user/login"
-        val url = urlServidor.plus("/api/user/login")
-
+        val url = config.URL.plus("/api/user/login")
 
         val jsonObjectRequest = JsonObjectRequest(url, jsonObject,
 

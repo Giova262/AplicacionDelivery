@@ -17,8 +17,6 @@ class LoginActivity : AppCompatActivity() {
     var idUsuario: Int = 0
     lateinit var datosUsuario :JSONObject
 
-    val urlServidor = "https://polar-stream-82449.herokuapp.com"
-    //val urlServidor = "http://192.168.0.4:5000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +78,21 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
+        pendienteBoton?.setOnClickListener {
+
+            pantalla_pendientes()
+        }
+
+    }
+
+    private fun pantalla_pendientes() {
+        val intent:Intent = Intent(this,PendientesActivity::class.java)
+
+        //intent.putExtra("userData",datosUsuario.toString())
+        intent.putExtra("iduser",idUsuario)
+        intent.putExtra("token",tokenUsario)
+        startActivity(intent)
+        //finish()
     }
 
 
@@ -107,7 +120,7 @@ class LoginActivity : AppCompatActivity() {
     private fun enviarDatosAlServidor(jsonObject: JSONObject?) {
 
 
-        val url = urlServidor.plus("/api/comercio/all")
+        val url = config.URL.plus("/api/comercio/all")
 
 
         val queue = Volley.newRequestQueue( this )

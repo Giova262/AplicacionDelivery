@@ -44,8 +44,6 @@ class ProductoActivity : AppCompatActivity() {
     lateinit var productos :JSONArray
     var coder = Geocoder(this)
 
-    val urlServidor = "https://polar-stream-82449.herokuapp.com"
-    //val urlServidor = "http://192.168.0.4:5000"
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -137,7 +135,7 @@ class ProductoActivity : AppCompatActivity() {
 
                 //...............Mando al servidor............................
 
-                val url = urlServidor.plus("/api/pedido/registrarPedido" )
+                val url = config.URL.plus("/api/pedido/registrarPedido" )
 
 
                 val queue = Volley.newRequestQueue( this )
@@ -205,7 +203,7 @@ class ProductoActivity : AppCompatActivity() {
 
     private fun enviarDatosAlServidor( idcomecio: Int ) {
 
-        val url = urlServidor.plus("/api/producto/productosPorComercio/"+ idcomecio.toString() )
+        val url = config.URL.plus("/api/producto/productosPorComercio/"+ idcomecio.toString() )
 
 
         val queue = Volley.newRequestQueue( this )
