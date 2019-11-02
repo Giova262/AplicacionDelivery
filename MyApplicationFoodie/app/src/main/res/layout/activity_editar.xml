@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditarActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+        <TextView
+            android:id="@+id/editar_mensajeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_marginBottom="8dp"
+            android:background="#2196F3"
+            android:gravity="center"
+            android:shadowColor="#033050"
+            android:text="Edita tu Perfil"
+            android:textColor="#A3E926"
+            android:textSize="12dp" />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Nombre :" />
+
+            <EditText
+                android:id="@+id/editar_nombreEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Email :" />
+
+            <EditText
+                android:id="@+id/editar_mailEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Password :" />
+
+            <EditText
+                android:id="@+id/editar_passEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="261dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Rol :" />
+
+            <Spinner
+                android:id="@+id/editar_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Foto :" />
+
+            <EditText
+                android:id="@+id/editar_fotoEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Red Social :" />
+
+            <EditText
+                android:id="@+id/editar_redsocialEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/editar_cambiarButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#18649E"
+            android:textColor="#F7F4F4"
+            android:textSize="24dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:padding="15dp"
+            android:text="Cambiar" />
+
+        <Button
+            android:id="@+id/editar_volverButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#18649E"
+            android:textColor="#F7F4F4"
+            android:textSize="24dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginHorizontal="20dp"
+            android:padding="15dp"
+            android:text="Volver" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

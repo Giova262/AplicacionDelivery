@@ -83,6 +83,35 @@ class LoginActivity : AppCompatActivity() {
             pantalla_pendientes()
         }
 
+        historialBoton?.setOnClickListener {
+
+            pantalla_historial()
+        }
+
+        editarBoton?.setOnClickListener {
+
+            pantalla_editar()
+        }
+
+    }
+
+    private fun pantalla_editar() {
+
+        val intent:Intent = Intent(this,EditarActivity::class.java)
+
+        intent.putExtra("iduser",idUsuario)
+        intent.putExtra("token",tokenUsario)
+        intent.putExtra("userData",datosUsuario.toString())
+        startActivity(intent)
+    }
+
+    private fun pantalla_historial() {
+        val intent:Intent = Intent(this,HistorialActivity::class.java)
+
+        //intent.putExtra("userData",datosUsuario.toString())
+        intent.putExtra("iduser",idUsuario)
+        intent.putExtra("token",tokenUsario)
+        startActivity(intent)
     }
 
     private fun pantalla_pendientes() {

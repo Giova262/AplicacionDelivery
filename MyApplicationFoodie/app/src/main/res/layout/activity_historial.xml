@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HistorialActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/pendientes_mensajeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#2196F3"
+            android:shadowColor="#033050"
+            android:layout_marginBottom="8dp"
+            android:textColor="#A3E926"
+            android:textSize="12dp"
+            android:gravity="center"
+            android:text="Historial de tus pendidos  " />
+
+        <ListView
+            android:id="@+id/historial_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
