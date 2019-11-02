@@ -64,9 +64,8 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             R.array.opciones,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
+
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
             spinner.adapter = adapter
         }
 
@@ -122,9 +121,41 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             Response.Listener<JSONObject> { response ->
 
                 var strResp = response.toString()
-                //val jsonob: JSONObject = JSONObject(strResp)
+                getDatosUsuarioActualizados()
 
-                mensaje_Toast( strResp )
+            },
+            Response.ErrorListener {  })
+
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Basic <<YOUR BASE64 USER:PASS>>"
+                headers["Content-Type"] = "application/json; charset=UTF-8"
+                headers["token"] = tokenUsario;
+
+                return headers
+            }
+        }
+
+        queue.add(jsonObjectRequest)
+
+    }
+
+    private fun getDatosUsuarioActualizados() {
+
+        val url = config.URL.plus("/api/user/"+ idUsuario.toString() )
+
+
+        val queue = Volley.newRequestQueue( this )
+        val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
+
+            Response.Listener<String> { response ->
+
+                var strResp = response.toString()
+                val jsonob: JSONObject = JSONObject(strResp)
+
+                datosUsuario =  jsonob.toString()
+                pantalla_login()
 
             },
             Response.ErrorListener {  })
