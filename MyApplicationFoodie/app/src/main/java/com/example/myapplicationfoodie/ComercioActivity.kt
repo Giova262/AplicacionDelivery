@@ -33,8 +33,6 @@ class ComercioActivity : AppCompatActivity() {
          idUsuario =  objetoIntent.getIntExtra("iduser",0)
          datosUsuario = objetoIntent.getStringExtra("userData")
 
-
-
         //.........................................................................
 
         var listView = findViewById<ListView>(R.id.comercio_listview)
