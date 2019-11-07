@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.facebook.login.LoginManager
@@ -145,19 +146,22 @@ class LoginDeliveryActivity : AppCompatActivity() {
     private fun consultarPedidosPendientes() {
 
 
-        val url = config.URL.plus("/api/comercio/all")
+        val url = config.URL.plus("/api/pedido/getPedidosPendientesParaDelivery/")
+
+        val jsonObject2 = JSONObject()
+        jsonObject2.put("lati",-45.1)
+        jsonObject2.put("longi",-50.1)
+
 
 
         val queue = Volley.newRequestQueue( this )
-        val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
+        val jsonObjectRequest = object: JsonObjectRequest( Request.Method.GET, url,jsonObject2,
 
-            Response.Listener<String> { response ->
+            Response.Listener<JSONObject> { response ->
 
                 var strResp = response.toString()
-                val jsonob: JSONObject = JSONObject(strResp)
-                var comercios= jsonob.getJSONArray("data")
 
-                pantalla_pedir(comercios.toString())
+                mensaje_Toast(strResp)
 
 
             },
