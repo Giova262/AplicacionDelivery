@@ -1,11 +1,9 @@
 package com.example.myapplicationfoodie
 
-import android.content.Context
+
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.widget.*
 import com.android.volley.Request
@@ -14,16 +12,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
 import android.widget.AdapterView.OnItemClickListener
-import android.R.string.ok
-import android.R.string.no
-import android.R.attr.label
 import android.location.Address
 import android.location.Geocoder
-import android.os.Parcel
-import android.os.Parcelable
-import android.widget.TextView
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONArray
 

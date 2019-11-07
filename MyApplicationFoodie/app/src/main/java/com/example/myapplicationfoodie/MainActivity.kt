@@ -196,8 +196,18 @@ class MainActivity : AppCompatActivity() {
 
                     val datos = jsonob.getJSONObject("dato")
 
-                    //.........Ahora veo si mando al login de usuario o de delivery
-                    pantalla_login( datos.toString() )
+                    val rolres = datos.getInt("rol")
+
+                    if( rolres == 0){
+
+                        pantalla_login( datos.toString() )
+                    }
+
+                    if( rolres == 1){
+
+                        pantalla_loginDelivery( datos.toString() )
+                    }
+
 
                 }else mensaje_Toast(mensaje)
 
@@ -211,6 +221,15 @@ class MainActivity : AppCompatActivity() {
         )
 
         queue.add( jsonObjectRequest )
+    }
+
+    private fun pantalla_loginDelivery(datos: String) {
+        val intent:Intent = Intent(this,LoginDeliveryActivity::class.java)
+        intent.putExtra("datos",datos)
+        intent.putExtra("token",tokenRedSocial)
+        startActivity(intent)
+        finish()
+
     }
 
     private fun pantalla_registro() {
