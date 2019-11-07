@@ -171,6 +171,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun enviarDatosAlServidor(jsonObject: JSONObject) {
 
+        //mensaje_Toast( jsonObject.toString())
+
         val queue = Volley.newRequestQueue( this )
         val url = config.URL.plus("/api/user/login")
 
@@ -187,6 +189,10 @@ class MainActivity : AppCompatActivity() {
                 val status = jsonob.getInt("status")
                 val token = jsonob.getString("token")
 
+               // mensaje_Toast( jsonob.toString())
+
+
+
                 //........Guardo el Token de mi app ..............................
 
                 tokenRedSocial = token
@@ -195,15 +201,16 @@ class MainActivity : AppCompatActivity() {
                 if(status == 1){
 
                     val datos = jsonob.getJSONObject("dato")
+                    //mensaje_Toast( rolDelUsuario.toString())
 
-                    val rolres = datos.getInt("rol")
+                    //val rolres = datos.getInt("rol")
 
-                    if( rolres == 0){
+                    if( rolDelUsuario == 0){
 
                         pantalla_login( datos.toString() )
                     }
 
-                    if( rolres == 1){
+                    if( rolDelUsuario == 1){
 
                         pantalla_loginDelivery( datos.toString() )
                     }
@@ -215,7 +222,7 @@ class MainActivity : AppCompatActivity() {
             },
             Response.ErrorListener { error ->
 
-
+                mensaje_Toast( "Error en respuesta del servidor!" )
                 error.printStackTrace()
             }
         )
@@ -289,6 +296,8 @@ class MainActivity : AppCompatActivity() {
                                 jsonObject2.put("pass","none")
                                 jsonObject2.put("rol",rolDelUsuario )
                                 jsonObject2.put("idToken",idToken)
+
+                               // mensaje_Toast("token de firebase :"+idToken)
 
                                 enviarDatosAlServidor(jsonObject2)
 
