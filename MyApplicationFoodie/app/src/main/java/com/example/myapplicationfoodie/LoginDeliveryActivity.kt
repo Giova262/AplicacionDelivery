@@ -52,7 +52,7 @@ class LoginDeliveryActivity : AppCompatActivity() {
         idUsuario = datosUsuario.getInt("id")
 
 
-        mensajeTextView.setText("Bienvenido! Elija tomar pedido , para ver los pedidos que estan en lista de espera!")
+        mensajeTextView.setText("Seleccione Tomar Pedido para ver los pedidos en espera!")
         nombreTextView.setText( "Nombre: " + datosUsuario.getString("nombre"))
         emailTextView.setText( "Email: " + datosUsuario.getString("mail"))
         nivelTextView.setText( "Nivel: " + datosUsuario.getString("nivel"))
