@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/fondoapp"
         android:orientation="vertical">
 
         <TextView
@@ -29,6 +30,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
+            android:background="#FFFF"
+            android:textColor="#000000"
+            android:textColorHint="#858383"
+            android:layout_marginHorizontal="1dp"
+            android:layout_marginVertical="5dp"
             android:hint="Ingrese Nombre"
              />
 
@@ -37,6 +43,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:background="#FFFF"
+            android:textColor="#000000"
+            android:textColorHint="#858383"
+            android:layout_marginHorizontal="1dp"
+            android:layout_marginVertical="5dp"
             android:hint="Ingrese Contraseña" />
 
         <EditText
@@ -44,6 +55,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:background="#FFFF"
+            android:textColor="#000000"
+            android:textColorHint="#858383"
+            android:layout_marginHorizontal="1dp"
+            android:layout_marginVertical="5dp"
             android:hint="Ingrese Email" />
 
         <EditText
@@ -52,6 +68,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
+            android:background="#FFFF"
+            android:textColor="#000000"
+            android:textColorHint="#858383"
+            android:layout_marginHorizontal="1dp"
+            android:layout_marginVertical="5dp"
             android:hint="Ingrese url Foto" />
 
         <LinearLayout
@@ -64,6 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:text="Cliente" />
 
             <CheckBox
@@ -71,6 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:text="Delivery" />
 
         </LinearLayout>
@@ -79,12 +102,16 @@
             android:id="@+id/register_registrarButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#18649E"
-            android:textColor="#F7F4F4"
-            android:textSize="24dp"
             android:text="Registrar"
-            android:padding="15dp"
-            android:paddingBottom="@dimen/cardview_compat_inset_shadow"/>
+            android:textColor="#FFFFFFFF"
+            android:textSize="30sp"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0.1"
+            android:shadowDy="0.1"
+            android:shadowRadius="5"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="5dp"  />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

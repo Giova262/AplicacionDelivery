@@ -9,24 +9,26 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/fondoapp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#2196F3"
+            android:layout_height="61dp"
+            android:background="@drawable/fondomensaje"
             android:shadowColor="#033050"
             android:layout_marginBottom="8dp"
-            android:textColor="#A3E926"
-            android:textSize="12dp"
+            android:textColor="#FFFFFF"
+            android:textSize="22dp"
             android:gravity="center"
-            android:text="Tus Historial de pedidos entregados!" />
+            android:text="Historial de tus pedidos entregados." />
 
         <ListView
 
             android:id="@+id/historialDelivery_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
