@@ -76,12 +76,12 @@ class LoginDeliveryActivity : AppCompatActivity() {
 
         miPedidoBoton?.setOnClickListener {
 
-           // pantalla_pendientes()
+            consultarMisPedidos()
         }
 
         historialBoton?.setOnClickListener {
 
-            //pantalla_historial()
+            consultarHistorial()
         }
 
         editarBoton?.setOnClickListener {
@@ -90,6 +90,118 @@ class LoginDeliveryActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun consultarHistorial() {
+
+        val url = config.URL.plus("/api/pedido/getHistorialDelivery/"+idUsuario.toString())
+
+        val queue = Volley.newRequestQueue( this )
+        val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
+
+            Response.Listener<String> { response ->
+
+                var strResp = response.toString()
+
+                val jsonob: JSONObject = JSONObject(strResp)
+                var pedidos= jsonob.getJSONArray("pedidos")
+
+                mensaje_Toast(pedidos.toString())
+
+                pantalla_mi_historial( pedidos.toString() )
+
+
+            },
+            Response.ErrorListener {  })
+
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Basic <<YOUR BASE64 USER:PASS>>"
+                headers["Content-Type"] = "application/json; charset=UTF-8"
+                headers["token"] = tokenUsario;
+
+                return headers
+            }
+        }
+
+        queue.add(jsonObjectRequest)
+
+    }
+
+    private fun pantalla_mi_historial(pedidos: String) {
+        val intent:Intent = Intent(this,HistorialDeliveryActivity::class.java)
+
+        intent.putExtra("iduser",idUsuario)
+        intent.putExtra("token",tokenUsario)
+        intent.putExtra("pedidiosPendientes",pedidos)
+        intent.putExtra("datos",datosUsuario.toString())
+
+
+        startActivity(intent)
+    }
+
+    private fun consultarMisPedidos() {
+
+        val url = config.URL.plus("/api/pedido/getPedidosDelivery/"+idUsuario.toString())
+
+        val queue = Volley.newRequestQueue( this )
+        val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
+
+            Response.Listener<String> { response ->
+
+                var strResp = response.toString()
+
+                val jsonob: JSONObject = JSONObject(strResp)
+                var pedidos= jsonob.getJSONArray("pedidos")
+
+                mensaje_Toast(pedidos.toString())
+
+                pantalla_mis_pedidos( pedidos.toString() )
+
+
+            },
+            Response.ErrorListener {  })
+
+        {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Basic <<YOUR BASE64 USER:PASS>>"
+                headers["Content-Type"] = "application/json; charset=UTF-8"
+                headers["token"] = tokenUsario;
+
+                return headers
+            }
+        }
+
+        queue.add(jsonObjectRequest)
+    }
+
+    private fun pantalla_mis_pedidos(pedidos: String) {
+
+        val intent:Intent = Intent(this,MisPedidosDeliveryActivity::class.java)
+
+        intent.putExtra("iduser",idUsuario)
+        intent.putExtra("token",tokenUsario)
+        intent.putExtra("pedidiosPendientes",pedidos)
+        intent.putExtra("datos",datosUsuario.toString())
+
+
+        startActivity(intent)
+
+    }
+
+    private fun pantalla_pedidos_pendientes( pedidos: String) {
+
+        val intent:Intent = Intent(this,PedidoPendienteActivity::class.java)
+
+        intent.putExtra("iduser",idUsuario)
+        intent.putExtra("token",tokenUsario)
+        intent.putExtra("pedidiosPendientes",pedidos)
+        intent.putExtra("datos",datosUsuario.toString())
+
+       // intent.putExtra("userData",datosUsuario.toString())
+        startActivity(intent)
     }
 
     private fun pantalla_editar() {
@@ -109,16 +221,6 @@ class LoginDeliveryActivity : AppCompatActivity() {
         intent.putExtra("iduser",idUsuario)
         intent.putExtra("token",tokenUsario)
         startActivity(intent)
-    }
-
-    private fun pantalla_pendientes() {
-        val intent:Intent = Intent(this,PendientesActivity::class.java)
-
-        //intent.putExtra("userData",datosUsuario.toString())
-        intent.putExtra("iduser",idUsuario)
-        intent.putExtra("token",tokenUsario)
-        startActivity(intent)
-        //finish()
     }
 
 
@@ -161,7 +263,10 @@ class LoginDeliveryActivity : AppCompatActivity() {
 
                 var strResp = response.toString()
 
-                mensaje_Toast(strResp)
+                val jsonob: JSONObject = JSONObject(strResp)
+                var pedidos= jsonob.getJSONArray("pedidos")
+
+                pantalla_pedidos_pendientes(pedidos.toString())
 
 
             },

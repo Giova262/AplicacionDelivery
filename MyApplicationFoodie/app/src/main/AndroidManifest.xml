@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditarActivity"></activity>
+        <activity android:name=".HistorialDeliveryActivity"></activity>
+        <activity android:name=".MisPedidosDeliveryActivity" />
+        <activity android:name=".PedidoDescActivity" />
+        <activity android:name=".PedidoPendienteActivity" />
+        <activity android:name=".EditarActivity" />
         <activity android:name=".HistorialActivity" />
         <activity android:name=".PendientesActivity" />
 
