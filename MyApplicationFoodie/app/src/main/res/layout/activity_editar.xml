@@ -9,23 +9,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/fondoapp"
         android:orientation="vertical">
-
-
 
         <TextView
             android:id="@+id/editar_mensajeTextView"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:layout_marginBottom="8dp"
-            android:background="#2196F3"
-            android:gravity="center"
+            android:layout_height="61dp"
+            android:background="@drawable/fondomensaje"
             android:shadowColor="#033050"
-            android:text="Edita tu Perfil"
-            android:textColor="#A3E926"
-            android:textSize="12dp" />
-
-
+            android:layout_marginBottom="8dp"
+            android:textColor="#FFFFFF"
+            android:textSize="22dp"
+            android:gravity="center"
+            android:text="Edita tus datos"  />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:text="Nombre :" />
 
             <EditText
@@ -48,6 +46,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:background="#FFFF"
+                android:textColor="#000000"
+                android:layout_marginHorizontal="30dp"
                 android:text="Name" />
         </LinearLayout>
 
@@ -62,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:text="Email :" />
 
             <EditText
@@ -71,6 +73,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:background="#FFFF"
+                android:textColor="#000000"
+                android:layout_marginHorizontal="30dp"
                 android:text="Name" />
         </LinearLayout>
 
@@ -85,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:text="Password :" />
 
             <EditText
@@ -94,6 +100,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:background="#FFFF"
+                android:textColor="#000000"
+                android:layout_marginHorizontal="30dp"
                 android:text="Name" />
         </LinearLayout>
 
@@ -109,6 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:textColor="#000000"
                 android:text="Rol :" />
 
             <Spinner
@@ -130,6 +140,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:text="Foto :" />
 
             <EditText
@@ -139,6 +150,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:background="#FFFF"
+                android:textColor="#000000"
+                android:layout_marginHorizontal="30dp"
                 android:text="Name" />
         </LinearLayout>
 
@@ -154,6 +168,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:textColor="#000000"
                 android:text="Red Social :" />
 
             <EditText
@@ -163,6 +178,9 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPersonName"
+                android:background="#FFFF"
+                android:textColor="#000000"
+                android:layout_marginHorizontal="30dp"
                 android:text="Name" />
         </LinearLayout>
 
@@ -170,27 +188,30 @@
             android:id="@+id/editar_cambiarButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#18649E"
-            android:textColor="#F7F4F4"
-            android:textSize="24dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
-            android:padding="15dp"
-            android:text="Cambiar" />
+            android:text="Cambiar"
+            android:textColor="#FFFFFFFF"
+            android:textSize="30sp"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0.1"
+            android:shadowDy="0.1"
+            android:shadowRadius="5"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="5dp" />
 
         <Button
             android:id="@+id/editar_volverButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#18649E"
-            android:textColor="#F7F4F4"
-            android:textSize="24dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-            android:layout_marginHorizontal="20dp"
-            android:padding="15dp"
-            android:text="Volver" />
+            android:text="Volver"
+            android:textColor="#FFFFFFFF"
+            android:textSize="30sp"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0.1"
+            android:shadowDy="0.1"
+            android:shadowRadius="5"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="5dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
