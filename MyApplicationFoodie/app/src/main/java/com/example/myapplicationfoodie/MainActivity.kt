@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -21,7 +22,8 @@ import com.android.volley.Response
 
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
+
 
     private var callbackManager: CallbackManager? = null
     private val TAG = "FaceLog"
@@ -44,102 +46,43 @@ class MainActivity : AppCompatActivity() {
 
         //................Obtengo Elementos............................
 
-        val checkbox_cliente = findViewById<CheckBox>(R.id.main_clienteCheckBox)
-        val checkbox_delivery = findViewById<CheckBox>(R.id.main_deliveryCheckBox)
         var emailEditText = findViewById<EditText>( R.id.main_emailEditText )
         val passEditText = findViewById<EditText>( R.id.main_passEditText )
         var buttonFacebookLogin = findViewById<LoginButton>(R.id.login_button)
         var buttonRegistrar = findViewById<Button>(R.id.main_registrarBoton)
         var buttonEntrar = findViewById<Button>(R.id.main_entrarBoton)
+        val spinner: Spinner = findViewById(R.id.main_spinner)
 
-        //..................Manejo de los Check Box .............................................
+        //...............Spiner...............................................................
 
-        buttonFacebookLogin.setEnabled(false)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.opciones,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
 
-        checkbox_cliente.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            if(isChecked && !checkbox_delivery.isChecked ){
-                rolDelUsuario=0
-                buttonFacebookLogin.setEnabled(true);
-            }
-            else if( !isChecked && checkbox_delivery.isChecked ){
-                rolDelUsuario=1
-                buttonFacebookLogin.setEnabled(true);
-
-            }else if(isChecked && checkbox_delivery.isChecked ){
-                buttonFacebookLogin.setEnabled(false);
-
-            }else if(!isChecked && !checkbox_delivery.isChecked ){
-                buttonFacebookLogin.setEnabled(false);
-            }
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
         }
 
-        checkbox_delivery.setOnCheckedChangeListener { buttonView, isChecked ->
+        spinner.onItemSelectedListener = this
 
-            if(isChecked && !checkbox_cliente.isChecked ){
-                rolDelUsuario=1
-                buttonFacebookLogin.setEnabled(true);
-            }
-            else if( !isChecked && checkbox_cliente.isChecked ){
-                rolDelUsuario=0
-                buttonFacebookLogin.setEnabled(true);
-
-            }else if(isChecked && checkbox_cliente.isChecked ){
-                buttonFacebookLogin.setEnabled(false);
-
-            }else if(!isChecked && !checkbox_cliente.isChecked ){
-                buttonFacebookLogin.setEnabled(false);
-            }
-        }
-
-        //...........................Manejo de Botones ...............................................
+        //...........................BOTONES..............................................
         
         buttonEntrar?.setOnClickListener {
 
-            //...........Chekear con cual rol entra..................
-            if ( checkbox_cliente.isChecked && !checkbox_delivery.isChecked ){
+            var mail = emailEditText.text
+            var pass = passEditText.text
+            var rol = rolDelUsuario
+            var uidfirebase = "-1"
 
-                //..............Genero Json Para enviar al servidor.................
+            val jsonObject = JSONObject()
+            jsonObject.put("mail",mail)
+            jsonObject.put("pass",pass)
+            jsonObject.put("rol",rol)
+            jsonObject.put("idToken",uidfirebase)
 
-                var mail = emailEditText.text
-                var pass = passEditText.text
-                var rol = 0
-                var uidfirebase = "-1"
-
-                val jsonObject = JSONObject()
-                jsonObject.put("mail",mail)
-                jsonObject.put("pass",pass)
-                jsonObject.put("rol",rol)
-                jsonObject.put("idToken",uidfirebase)
-
-                //...................................................................
-
-                enviarDatosAlServidor(jsonObject)
-
-            }
-
-            else if ( !checkbox_cliente.isChecked && checkbox_delivery.isChecked ){
-
-                //..............Genero Json Para enviar al servidor.................
-
-                var mail = emailEditText.text
-                var pass = passEditText.text
-                var rol = 1
-                var uidfirebase = "-1"
-
-                val jsonObject = JSONObject()
-                jsonObject.put("mail",mail)
-                jsonObject.put("pass",pass)
-                jsonObject.put("rol",rol)
-                jsonObject.put("idToken",uidfirebase)
-
-                //...................................................................
-
-                enviarDatosAlServidor(jsonObject)
-
-            }else{
-                mensaje_Toast("Selecciona un Rol para poder ingresar. Gracias!")
-            }
+            enviarDatosAlServidor(jsonObject)
 
         }
 
@@ -149,6 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         buttonFacebookLogin.registerCallback(callbackManager, object :
             FacebookCallback<LoginResult> {
+
             override fun onSuccess(loginResult: LoginResult) {
                 //............. Login Exitosamente usando Facebook........................................
                 handleFacebookAccessToken(loginResult.accessToken)
@@ -156,22 +100,15 @@ class MainActivity : AppCompatActivity() {
 
             override fun onCancel() {
                 Log.d(TAG, "facebook:onCancel")
-
-                // ...
             }
 
             override fun onError(error: FacebookException) {
                 Log.d(TAG, "facebook:onError", error)
-                // ...
             }
         })
     }
 
-
-
     private fun enviarDatosAlServidor(jsonObject: JSONObject) {
-
-        //mensaje_Toast( jsonObject.toString())
 
         val queue = Volley.newRequestQueue( this )
         val url = config.URL.plus("/api/user/login")
@@ -201,9 +138,7 @@ class MainActivity : AppCompatActivity() {
                 if(status == 1){
 
                     val datos = jsonob.getJSONObject("dato")
-                    //mensaje_Toast( rolDelUsuario.toString())
 
-                    //val rolres = datos.getInt("rol")
 
                     if( rolDelUsuario == 0){
 
@@ -314,6 +249,14 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        rolDelUsuario = position
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+
     }
     //..
 }

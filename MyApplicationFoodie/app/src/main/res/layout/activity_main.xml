@@ -10,27 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@drawable/fondoapp"
         app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/main_mensajeTextView"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="#2196F3"
-            android:shadowColor="#033050"
-            android:layout_marginBottom="8dp"
-            android:textColor="#A3E926"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:text="Foodie" />
 
         <ImageView
             android:id="@+id/main_logoImageView"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:padding="5dp"
-            app:srcCompat="@android:drawable/sym_def_app_icon" />
+            android:layout_marginVertical="30dp"
+            android:layout_marginHorizontal="30dp"
+            app:srcCompat="@drawable/iconoaplicacion" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,19 +27,20 @@
             android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/main_clienteCheckBox"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="164dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:layout_weight="1"
-                android:text="Cliente" />
+                android:text="Selecciona el Rol "
+                android:textColor="#0E0D0D" />
 
-            <CheckBox
-                android:id="@+id/main_deliveryCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Delivery" />
+            <Spinner
+                android:id="@+id/main_spinner"
+                android:layout_marginHorizontal="20dp"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <EditText
@@ -59,7 +49,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:ems="10"
+            android:background="#EEEAEA"
+            android:hint="Ingrese su Email"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="5dp"
             android:inputType="textEmailAddress"
+            android:textColorHint="#5A5858"
+            android:textColor="#0E0D0D"
             android:text="josue@" />
 
         <EditText
@@ -67,6 +63,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginVertical="5dp"
+            android:hint="Ingrese su Contraseña"
+            android:textColorHint="#5A5858"
+            android:background="#EEEAEA"
+            android:textColor="#0E0D0D"
             android:ems="10"
             android:inputType="textPassword"
             android:text="contra" />
@@ -75,8 +77,15 @@
             android:id="@+id/main_entrarBoton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#18649E"
-            android:textColor="#EEEAEA"
+            android:background="#013A64"
+            android:textColor="#E4EED5"
+            android:layout_marginHorizontal="40dp"
+            android:shadowColor="#A8A8A8"
+            android:layout_marginTop="20dp"
+            android:shadowRadius="5"
+            android:shadowDx="0"
+            android:shadowDy="0"
+
             android:text="Entrar" />
 
         <com.facebook.login.widget.LoginButton
@@ -93,10 +102,12 @@
             android:layout_width="246dp"
             android:layout_height="28dp"
             android:layout_gravity="center_horizontal"
+            android:shadowColor="#A8A8A8"
             android:background="#18649E"
             android:padding="2dp"
             android:text="Registrar"
             android:textColor="#EEEAEA"
+            android:shadowRadius="5"
             android:textSize="18dp" />
 
     </LinearLayout>
