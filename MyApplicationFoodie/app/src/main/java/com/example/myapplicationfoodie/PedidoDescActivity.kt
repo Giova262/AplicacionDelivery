@@ -76,6 +76,7 @@ class PedidoDescActivity : AppCompatActivity() {
             intent.putExtra("iduser",idUsuario)
             intent.putExtra("token",tokenUsario)
             intent.putExtra("pedidiosPendientes",pedidos)
+            intent.putExtra("datos",datosUsuario)
             startActivity(intent)
         }
 

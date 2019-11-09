@@ -105,6 +105,8 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         //...........................FOTO..............................................
 
 
+        fotoUrl = usuario.getString("foto")
+
         Picasso.get().load( usuario.getString("foto") ).into(imagen, object: com.squareup.picasso.Callback {
 
             override fun onError(e: Exception?) {
@@ -138,7 +140,7 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         cambiarBoton?.setOnClickListener {
 
-            if(fotoUrl != ""){
+           
 
                 val jsonObject = JSONObject()
                 jsonObject.put("id",idUsuario)
@@ -151,9 +153,7 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 enviarDatosAlServidor( jsonObject )
 
-            }else{
-                mensaje_Toast("Debes subir la foto antes , presiona el boton Subir")
-            }
+
 
 
 
