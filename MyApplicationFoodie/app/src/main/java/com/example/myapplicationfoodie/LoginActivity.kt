@@ -137,6 +137,7 @@ class LoginActivity : AppCompatActivity() {
         //intent.putExtra("userData",datosUsuario.toString())
         intent.putExtra("iduser",idUsuario)
         intent.putExtra("token",tokenUsario)
+        intent.putExtra("datos",datosUsuario.toString())
         startActivity(intent)
         //finish()
     }

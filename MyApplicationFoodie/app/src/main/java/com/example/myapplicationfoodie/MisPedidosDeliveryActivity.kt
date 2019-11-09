@@ -77,9 +77,9 @@ class MisPedidosDeliveryActivity : AppCompatActivity() {
 
                 val jsonObject1 = pendientes.getJSONObject(position)
 
-                //pantalla_pedidoDec(jsonObject1.toString())
+                pantalla_mipedidoopciones(jsonObject1.toString())
 
-                mensaje_Toast( position.toString() )
+                //mensaje_Toast( position.toString() )
             }
         }
 
@@ -90,13 +90,12 @@ class MisPedidosDeliveryActivity : AppCompatActivity() {
         Toast.makeText( this,s, Toast.LENGTH_LONG).show()
     }
 
-    private fun pantalla_pedidoDec(s: String) {
-        val intent:Intent = Intent(this,PedidoDescActivity::class.java)
+    private fun pantalla_mipedidoopciones(datos: String) {
+        val intent:Intent = Intent(this,PedidoOpcionesDeliveryActivity::class.java)
 
         intent.putExtra("token",tokenUsario)
         intent.putExtra("idUsuario",idUsuario)
-        intent.putExtra("pedido",s)
-        intent.putExtra("pedidos",pendientes.toString() )
+        intent.putExtra("pedido",datos)
         intent.putExtra("datos",datosUsuario)
 
         startActivity(intent)

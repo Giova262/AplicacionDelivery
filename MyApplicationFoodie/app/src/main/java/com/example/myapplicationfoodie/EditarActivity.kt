@@ -139,9 +139,7 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         //...........................................................................
 
         cambiarBoton?.setOnClickListener {
-
-           
-
+            
                 val jsonObject = JSONObject()
                 jsonObject.put("id",idUsuario)
                 jsonObject.put("nombre",nombreEditText.text)
@@ -152,10 +150,6 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 jsonObject.put("redsocial",redsocialEditText.text)
 
                 enviarDatosAlServidor( jsonObject )
-
-
-
-
 
         }
 

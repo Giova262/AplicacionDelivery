@@ -15,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PruebasActivity"></activity>
+        <activity android:name=".PedidoOpcionesDeliveryActivity"></activity>
+        <activity android:name=".PedidoOpcionesClienteActivity" />
+        <activity android:name=".PruebasActivity" />
         <activity android:name=".HistorialDeliveryActivity" />
         <activity android:name=".MisPedidosDeliveryActivity" />
         <activity android:name=".PedidoDescActivity" />

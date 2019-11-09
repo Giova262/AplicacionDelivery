@@ -21,6 +21,7 @@ class PendientesActivity : AppCompatActivity() {
     var tokenUsario :String = "-1"
     var idUsuario: Int = 0
     lateinit var pendientes: JSONArray
+    var datosUsuario :String = "-1"
 
 
 
@@ -34,6 +35,7 @@ class PendientesActivity : AppCompatActivity() {
 
         tokenUsario = objetoIntent.getStringExtra("token")
         idUsuario =  objetoIntent.getIntExtra("iduser",0)
+        datosUsuario = objetoIntent.getStringExtra("datos")
 
 
         //.........................................................................
@@ -126,10 +128,25 @@ class PendientesActivity : AppCompatActivity() {
                 position: Int, id: Long
             ) {
 
+                val jsonObject1 = pendientes.getJSONObject(position)
+
+                pantalla_mipedidoopciones(jsonObject1.toString())
 
             }
         }
 
 
+    }
+
+    private fun pantalla_mipedidoopciones(pedido: String) {
+        val intent:Intent = Intent(this,PedidoOpcionesClienteActivity::class.java)
+
+        intent.putExtra("token",tokenUsario)
+        intent.putExtra("idUsuario",idUsuario)
+        intent.putExtra("pedido",pedido)
+        intent.putExtra("datos",datosUsuario)
+
+        startActivity(intent)
+        finish()
     }
 }
