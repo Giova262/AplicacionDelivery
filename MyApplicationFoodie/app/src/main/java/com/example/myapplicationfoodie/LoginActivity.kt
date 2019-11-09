@@ -9,7 +9,10 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.facebook.login.LoginManager
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
+import java.io.IOException
+import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
@@ -61,9 +64,23 @@ class LoginActivity : AppCompatActivity() {
         nivelTextView.setText( "Nivel: " + datosUsuario.getString("nivel"))
         puntajeTextView.setText( "Puntaje: " + datosUsuario.getString("puntaje"))
 
-        imagenTextView.setImageDrawable(getResources().getDrawable(R.drawable.user));
 
-        //.........................................................................
+        //...........................FOTO..............................................
+
+
+        Picasso.get().load( datosUsuario.getString("foto") ).into(imagenTextView, object: com.squareup.picasso.Callback {
+
+                override fun onError(e: Exception?) {
+
+                    mensaje_Toast("Imagen por defecto")
+                    imagenTextView.setImageDrawable(getResources().getDrawable(R.drawable.user))
+                }
+
+                override fun onSuccess() {
+
+                }
+        })
+
 
         //....................Manejo de botones ..................................
 

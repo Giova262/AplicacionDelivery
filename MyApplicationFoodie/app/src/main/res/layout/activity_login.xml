@@ -31,9 +31,10 @@
 
             <ImageView
                 android:id="@+id/loginCliente_ImageView"
-                android:layout_width="163dp"
+                android:layout_width="370dp"
                 android:layout_height="105dp"
                 android:layout_weight="1"
+                android:paddingVertical="1dp"
                 app:srcCompat="@android:drawable/ic_menu_myplaces" />
 
             <LinearLayout
@@ -94,7 +95,8 @@
             android:shadowDy="0.1"
             android:shadowRadius="5"
             android:layout_marginHorizontal="40dp"
-            android:layout_marginVertical="5dp" />
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="5dp" />
 
         <Button
             android:id="@+id/loginCliente_pendientesButton"

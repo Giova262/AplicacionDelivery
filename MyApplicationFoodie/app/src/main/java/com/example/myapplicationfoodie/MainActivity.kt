@@ -71,6 +71,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
         
         buttonEntrar?.setOnClickListener {
 
+           // pantalla_pruebas()
+
             var mail = emailEditText.text
             var pass = passEditText.text
             var rol = rolDelUsuario
@@ -125,9 +127,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
                 val mensaje = jsonob.getString("message")
                 val status = jsonob.getInt("status")
                 val token = jsonob.getString("token")
-
-               // mensaje_Toast( jsonob.toString())
-
 
 
                 //........Guardo el Token de mi app ..............................
@@ -184,6 +183,12 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
         val intent:Intent = Intent(this,LoginActivity::class.java)
         intent.putExtra("datos",datos)
         intent.putExtra("token",tokenRedSocial)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun pantalla_pruebas( ) {
+        val intent:Intent = Intent(this,PruebasActivity::class.java)
         startActivity(intent)
         finish()
     }
