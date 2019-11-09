@@ -1,9 +1,12 @@
 package com.example.myapplicationfoodie
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.*
 import com.android.volley.Request
@@ -11,7 +14,17 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import org.json.JSONObject
+import java.io.IOException
+import java.lang.Exception
+import java.util.*
+import kotlin.collections.HashMap
 
 class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -19,6 +32,14 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     var idUsuario: Int = 0
     var rolUsuario: Int = -1
     lateinit var datosUsuario:String
+
+    //...........
+    private var filePath: Uri? = null
+    private val PICK_IMAGE_REQUEST = 71
+    private var fotoUrl:String = ""
+    var storage: FirebaseStorage? = null
+    var storageReference: StorageReference? = null
+    //............
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +52,37 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         var nombreEditText = findViewById<EditText>( R.id.editar_nombreEditText )
         var passEditText = findViewById<EditText>( R.id.editar_passEditText )
         var emailEditText = findViewById<EditText>( R.id.editar_mailEditText )
-        var fotoEditText = findViewById<EditText>(R.id.editar_fotoEditText)
+       // var fotoEditText = findViewById<EditText>(R.id.editar_fotoEditText)
         var redsocialEditText = findViewById<EditText>(R.id.editar_redsocialEditText)
 
         var cambiarBoton = findViewById<Button>(R.id.editar_cambiarButton)
         var volverBoton = findViewById<Button>(R.id.editar_volverButton)
+
+        var elegirfotoBoton = findViewById<Button>(R.id.editar_elegirbutton)
+        var subirfotoBoton = findViewById<Button>(R.id.editar_subirbutton)
+        var imagen = findViewById<ImageView>(R.id.editar_imageView)
+
+        //...................Firebase store.......................
+
+        storage = FirebaseStorage.getInstance()
+        storageReference = storage!!.getReference()
+
+
+        //................BOTONES.......................................
+
+        subirfotoBoton.setEnabled(false)
+
+        elegirfotoBoton?.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+                chooseImage()
+            }
+        })
+
+        subirfotoBoton?.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+                uploadImage()
+            }
+        })
 
         //.....................Recibo datos ....................................
 
@@ -52,8 +99,24 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         nombreEditText.setText( usuario.getString("nombre")  )
         passEditText.setText( usuario.getString("pass")  )
         emailEditText.setText( usuario.getString("mail")  )
-        fotoEditText.setText( usuario.getString("foto")  )
+        //fotoEditText.setText( usuario.getString("foto")  )
         redsocialEditText.setText( usuario.getString("redsocial")  )
+
+        //...........................FOTO..............................................
+
+
+        Picasso.get().load( usuario.getString("foto") ).into(imagen, object: com.squareup.picasso.Callback {
+
+            override fun onError(e: Exception?) {
+
+                mensaje_Toast("Imagen por defecto")
+                imagen.setImageDrawable(getResources().getDrawable(R.drawable.user))
+            }
+
+            override fun onSuccess() {
+
+            }
+        })
 
         //...............................SPINER.....................................
 
@@ -75,16 +138,24 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         cambiarBoton?.setOnClickListener {
 
-            val jsonObject = JSONObject()
-            jsonObject.put("id",idUsuario)
-            jsonObject.put("nombre",nombreEditText.text)
-            jsonObject.put("mail",emailEditText.text)
-            jsonObject.put("pass",passEditText.text)
-            jsonObject.put("rol",rolUsuario)
-            jsonObject.put("foto",fotoEditText.text)
-            jsonObject.put("redsocial",redsocialEditText.text)
+            if(fotoUrl != ""){
 
-            enviarDatosAlServidor( jsonObject )
+                val jsonObject = JSONObject()
+                jsonObject.put("id",idUsuario)
+                jsonObject.put("nombre",nombreEditText.text)
+                jsonObject.put("mail",emailEditText.text)
+                jsonObject.put("pass",passEditText.text)
+                jsonObject.put("rol",rolUsuario)
+                jsonObject.put("foto",fotoUrl )
+                jsonObject.put("redsocial",redsocialEditText.text)
+
+                enviarDatosAlServidor( jsonObject )
+
+            }else{
+                mensaje_Toast("Debes subir la foto antes , presiona el boton Subir")
+            }
+
+
 
         }
 
@@ -94,6 +165,98 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
 
 
+    }
+
+    private fun chooseImage() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // var fotoEditText = findViewById<EditText>(R.id.register_fotoEditText)
+        var subirfotoBoton = findViewById<Button>(R.id.editar_subirbutton)
+        var imagen = findViewById<ImageView>(R.id.editar_imageView)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK
+            && data != null && data.data != null
+        ) {
+            filePath = data.data
+
+            try {
+
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
+                imagen?.setImageBitmap(bitmap)
+                subirfotoBoton.setEnabled(true)
+
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+    private fun uploadImage() {
+
+        // var fotoEditText = findViewById<EditText>(R.id.register_fotoEditText)
+
+        if (filePath != null) {
+            val progressDialog = ProgressDialog(this)
+            progressDialog.setTitle("Uploading...")
+            progressDialog.show()
+
+            val ref = storageReference?.child("images/" + UUID.randomUUID().toString())
+
+            var uploadTask = ref?.putFile(filePath!!)
+
+                ?.addOnProgressListener { taskSnapshot ->
+                    val progress = 100.0 * taskSnapshot.bytesTransferred / taskSnapshot
+                        .totalByteCount
+                    progressDialog.setMessage("Uploaded " + progress.toInt() + "%")
+
+                    if( progress == 100.0){
+                        progressDialog.dismiss()
+                    }
+                }
+                ?.addOnSuccessListener {
+
+                    mensaje_Toast( "Foto subida satisfactoriamente." )
+
+                }
+
+            uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                return@Continuation ref?.downloadUrl
+
+
+            })?.addOnCompleteListener { task ->
+
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+                    fotoUrl = downloadUri.toString()
+                    // println("url:"  + downloadUri ) //aca tengo la URL
+
+                    // fotoEditText.setText( downloadUri.toString() )
+
+
+                } else {
+                    // Handle failures
+                }
+            }
+
+        }else{
+
+            mensaje_Toast("Error : No hay foto para subir")
+        }
     }
 
     private fun pantalla_login() {
