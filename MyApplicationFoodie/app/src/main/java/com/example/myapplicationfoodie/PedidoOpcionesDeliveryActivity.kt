@@ -40,7 +40,7 @@ class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
 
         var mapaBoton = findViewById<Button>(R.id.pedOpcDelivery_mapaButton)
         var chatBoton = findViewById<Button>(R.id.pedOpcDelivery_chatButton)
-        var volverBoton = findViewById<Button>(R.id.pedOpcDelivery_volverButton)
+
 
         //----------------------- Botones -----------------------
 

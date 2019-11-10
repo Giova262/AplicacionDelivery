@@ -33,15 +33,15 @@ class PedidoOpcionesClienteActivity : AppCompatActivity() {
         //----------------------- Obtengo Lat/Long del Pedido -----------------------
 
         var pedidoObj = JSONObject(pedido)
-        latitud = pedidoObj.getDouble("ped_latituddestino")
-        longitud = pedidoObj.getDouble("ped_longituddestino")
+        latitud = pedidoObj.getDouble("ped_latitudinicio")
+        longitud = pedidoObj.getDouble("ped_longitudinicio")
 
         //----------------------- Obtengo Elementos -----------------------
 
         var mapaBoton = findViewById<Button>(R.id.pedOpcCliente_mapabutton)
         var chatBoton = findViewById<Button>(R.id.pedOpcCliente_chatbutton)
         var entregadoBoton = findViewById<Button>(R.id.pedOpcCliente_entregadobutton)
-        var volverBoton = findViewById<Button>(R.id.pedOpcCliente_volverbutton)
+
 
         //----------------------- Botones -----------------------
 
