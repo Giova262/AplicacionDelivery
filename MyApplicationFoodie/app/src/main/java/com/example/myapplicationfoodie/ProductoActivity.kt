@@ -2,6 +2,7 @@ package com.example.myapplicationfoodie
 
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -14,11 +15,32 @@ import org.json.JSONObject
 import android.widget.AdapterView.OnItemClickListener
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
+import android.os.Build
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.android.volley.toolbox.JsonObjectRequest
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
 import org.json.JSONArray
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.activity_producto.*
 
 
-class ProductoActivity : AppCompatActivity() {
+class ProductoActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var tokenUsario :String = "-1"
     private var idComercio :Int = -1
@@ -26,16 +48,23 @@ class ProductoActivity : AppCompatActivity() {
     private var dirInicio: String = ""
     private var latInicio: Double = 0.0
     private var longInicio: Double = 0.0
+    private var latFinal: Double = 0.0
+    private var longFinal: Double = 0.0
     private lateinit var datosUsuario:String
     private var bolsaDeCompra = ArrayList<String>()
     private lateinit var productos :JSONArray
     private var coder = Geocoder(this)
+    private lateinit var mMap: GoogleMap
+    private val MAP_VIEW_BUNDLE_KEY = "MapViewBundleKey"
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_producto)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         //----------------------- Recibir Datos -----------------------
 
@@ -64,7 +93,46 @@ class ProductoActivity : AppCompatActivity() {
 
         var verBolsaButton = findViewById<Button>(R.id.producto_verbolsaButton)
         var confirmarButton = findViewById<Button>(R.id.producto_confirmarButton)
+        var mapa = findViewById<MapView>(R.id.mapView)
 
+        var mapViewBundle: Bundle? = null
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY)
+        }
+
+        mapa.onCreate(mapViewBundle)
+        mapa.getMapAsync(this)
+
+        var direccionEdittext = findViewById<EditText>(R.id.producto_direccionEditText)
+        direccionEdittext.addTextChangedListener( object:  TextWatcher {
+
+            override fun afterTextChanged(s: Editable?) {
+
+                var direccionString = direccionEdittext.text
+                var address:List<Address> = coder.getFromLocationName( direccionString.toString() ,5)
+
+                if (address.isNotEmpty()) {
+
+                    latFinal = address.get(0).getLatitude()
+                    longFinal = address.get(0).getLongitude()
+                    
+                    var sydney = LatLng(latFinal, longFinal)
+                    val zoomLevel = 16.0f //This goes up to 21
+
+                    mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney").draggable(true))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, zoomLevel))
+
+                }
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
 
         //----------------------- Botones -----------------------
 
@@ -73,7 +141,9 @@ class ProductoActivity : AppCompatActivity() {
         }
 
         confirmarButton?.setOnClickListener {
+
             confirmar_compra()
+
         }
 
         //----------------------- Enviar Datos -----------------------
@@ -107,8 +177,8 @@ class ProductoActivity : AppCompatActivity() {
 
             if (address.isNotEmpty()) {
 
-                val latitude = address.get(0).getLatitude()
-                val longitude = address.get(0).getLongitude()
+                latFinal = address.get(0).getLatitude()
+                longFinal = address.get(0).getLongitude()
 
                 val objetoJson= JSONObject()
                 objetoJson.put("iduser", idUsuario )
@@ -116,8 +186,8 @@ class ProductoActivity : AppCompatActivity() {
                 objetoJson.put("dirf", direccionString )
                 objetoJson.put("lati", latInicio )
                 objetoJson.put("longi", longInicio )
-                objetoJson.put("latf", latitude )
-                objetoJson.put("longf", longitude )
+                objetoJson.put("latf", latFinal )
+                objetoJson.put("longf", longFinal )
                 objetoJson.put("items", list )
 
 
@@ -274,7 +344,42 @@ class ProductoActivity : AppCompatActivity() {
         startActivity(intent)
 
     }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+
+        mMap = googleMap
+
+        var sydney = LatLng(-34.0, 151.0)
+        val zoomLevel = 16.0f //This goes up to 21
+
+        mMap.addMarker(MarkerOptions().position(sydney).title("Tu Direccion").draggable(true))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, zoomLevel))
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    public override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        var mapViewBundle = outState.getBundle(MAP_VIEW_BUNDLE_KEY)
+        if (mapViewBundle == null) {
+            mapViewBundle = Bundle()
+            outState.putBundle(MAP_VIEW_BUNDLE_KEY, mapViewBundle)
+        }
+
+        mapView.onSaveInstanceState(mapViewBundle)
+    }
+
+
 }
+
+
+
+
 
 
 

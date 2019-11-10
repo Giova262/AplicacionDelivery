@@ -55,7 +55,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val sydney = LatLng(latitud, longitud)
 
         val zoomLevel = 16.0f //This goes up to 21
-        
+
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, zoomLevel))
        // mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
