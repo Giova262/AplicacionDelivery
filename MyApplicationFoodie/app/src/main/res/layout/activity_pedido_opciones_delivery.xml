@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/pedOpcDelivery_mensajetextView"
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:background="@drawable/fondomensaje"
@@ -25,7 +25,7 @@
             android:text="Detalles del Pedido"  />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/pedOpcDelivery_mapaButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ver mapa"
@@ -40,7 +40,7 @@
             android:layout_marginVertical="5dp"  />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/pedOpcDelivery_chatButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Abrir chat"
@@ -55,7 +55,7 @@
             android:layout_marginVertical="5dp"  />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/pedOpcDelivery_volverButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Volver"

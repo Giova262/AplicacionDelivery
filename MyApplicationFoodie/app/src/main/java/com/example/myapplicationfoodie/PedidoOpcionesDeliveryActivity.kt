@@ -3,7 +3,9 @@ package com.example.myapplicationfoodie
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
+import org.json.JSONObject
 
 class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
 
@@ -12,6 +14,9 @@ class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
     var datosUsuario :String = "-1"
     var idUsuario: Int = 0
     var pedido: String = ""
+
+    var latitud:Double = 0.0
+    var longitud:Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +33,37 @@ class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
 
         //.........................................
 
-        mensaje_Toast( pedido )
+        var pedidoObj = JSONObject(pedido)
+
+        latitud = pedidoObj.getDouble("ped_latituddestino")
+        longitud = pedidoObj.getDouble("ped_longituddestino")
+
+        //..............Obtengo elementos.............................
+
+        var mapaBoton = findViewById<Button>(R.id.pedOpcDelivery_mapaButton)
+        var chatBoton = findViewById<Button>(R.id.pedOpcDelivery_chatButton)
+        var volverBoton = findViewById<Button>(R.id.pedOpcDelivery_volverButton)
+
+        //.............Botones.................................
+
+        mapaBoton?.setOnClickListener {
+            pantalla_mapa( )
+        }
+
+
     }
 
     private fun mensaje_Toast(s: String) {
         Toast.makeText( this,s, Toast.LENGTH_LONG).show()
+    }
+
+    private fun pantalla_mapa( ) {
+        val intent:Intent = Intent(this,MapsActivity::class.java)
+
+        intent.putExtra("lat",latitud)
+        intent.putExtra("long",longitud)
+
+        startActivity(intent)
+        //finish()
     }
 }

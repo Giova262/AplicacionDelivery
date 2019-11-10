@@ -99,6 +99,6 @@ class MisPedidosDeliveryActivity : AppCompatActivity() {
         intent.putExtra("datos",datosUsuario)
 
         startActivity(intent)
-        finish()
+       // finish()
     }
 }

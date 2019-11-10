@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
         
         buttonEntrar?.setOnClickListener {
 
-           // pantalla_pruebas()
+           //pantalla_pruebas()
 
             var mail = emailEditText.text
             var pass = passEditText.text
@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
     }
 
     private fun pantalla_pruebas( ) {
-        val intent:Intent = Intent(this,PruebasActivity::class.java)
+        val intent:Intent = Intent(this,MapsActivity::class.java)
         startActivity(intent)
         finish()
     }

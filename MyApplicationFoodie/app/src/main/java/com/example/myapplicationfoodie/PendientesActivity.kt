@@ -147,6 +147,6 @@ class PendientesActivity : AppCompatActivity() {
         intent.putExtra("datos",datosUsuario)
 
         startActivity(intent)
-        finish()
+       // finish()
     }
 }
