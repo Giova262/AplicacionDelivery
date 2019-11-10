@@ -15,14 +15,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
-    var latitud:Double = 0.0
-    var longitud:Double = 0.0
+    private var latitud:Double = 0.0
+    private var longitud:Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        //.....................Recibo datos ....................................
+        //----------------------- Recibo Datos -----------------------
 
         val objetoIntent : Intent =intent
 
@@ -51,7 +51,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         //val sydney = LatLng(-34.0, 151.0)
+
         val sydney = LatLng(latitud, longitud)
+
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }

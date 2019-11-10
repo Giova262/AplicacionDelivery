@@ -10,19 +10,18 @@ import org.json.JSONObject
 class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
 
 
-    var tokenUsario :String = "-1"
-    var datosUsuario :String = "-1"
-    var idUsuario: Int = 0
-    var pedido: String = ""
-
-    var latitud:Double = 0.0
-    var longitud:Double = 0.0
+    private var tokenUsario :String = "-1"
+    private var datosUsuario :String = "-1"
+    private var idUsuario: Int = 0
+    private var pedido: String = ""
+    private var latitud:Double = 0.0
+    private var longitud:Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pedido_opciones_delivery)
 
-        //.....................Recibo datos ....................................
+        //----------------------- Recibo Datos -----------------------
 
         val objetoIntent : Intent =intent
 
@@ -31,25 +30,23 @@ class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
         pedido = objetoIntent.getStringExtra("pedido")
         datosUsuario = objetoIntent.getStringExtra("datos")
 
-        //.........................................
+        //----------------------- Obtengo Lat/Long -----------------------
 
         var pedidoObj = JSONObject(pedido)
-
         latitud = pedidoObj.getDouble("ped_latituddestino")
         longitud = pedidoObj.getDouble("ped_longituddestino")
 
-        //..............Obtengo elementos.............................
+        //----------------------- Obtengo Elementos -----------------------
 
         var mapaBoton = findViewById<Button>(R.id.pedOpcDelivery_mapaButton)
         var chatBoton = findViewById<Button>(R.id.pedOpcDelivery_chatButton)
         var volverBoton = findViewById<Button>(R.id.pedOpcDelivery_volverButton)
 
-        //.............Botones.................................
+        //----------------------- Botones -----------------------
 
         mapaBoton?.setOnClickListener {
             pantalla_mapa( )
         }
-
 
     }
 
@@ -58,12 +55,13 @@ class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
     }
 
     private fun pantalla_mapa( ) {
+
         val intent:Intent = Intent(this,MapsActivity::class.java)
 
         intent.putExtra("lat",latitud)
         intent.putExtra("long",longitud)
 
         startActivity(intent)
-        //EFfinish()
+
     }
 }

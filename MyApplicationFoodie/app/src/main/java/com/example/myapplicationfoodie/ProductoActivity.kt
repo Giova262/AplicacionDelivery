@@ -20,19 +20,16 @@ import org.json.JSONArray
 
 class ProductoActivity : AppCompatActivity() {
 
-    var tokenUsario :String = "-1"
-    var idComercio :Int = -1
-
-    var idUsuario: Int = 0
-    var dirInicio: String = ""
-    var latInicio: Double = 0.0
-    var longInicio: Double = 0.0
-
-    lateinit var datosUsuario:String
-
-    var bolsaDeCompra = ArrayList<String>()
-    lateinit var productos :JSONArray
-    var coder = Geocoder(this)
+    private var tokenUsario :String = "-1"
+    private var idComercio :Int = -1
+    private var idUsuario: Int = 0
+    private var dirInicio: String = ""
+    private var latInicio: Double = 0.0
+    private var longInicio: Double = 0.0
+    private lateinit var datosUsuario:String
+    private var bolsaDeCompra = ArrayList<String>()
+    private lateinit var productos :JSONArray
+    private var coder = Geocoder(this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +37,7 @@ class ProductoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_producto)
 
-        //.....................Recibo datos ....................................
+        //----------------------- Recibir Datos -----------------------
 
         val objetoIntent : Intent =intent
 
@@ -56,7 +53,6 @@ class ProductoActivity : AppCompatActivity() {
 
         idComercio = objetoIntent.getIntExtra("idComercio", 0)
         tokenUsario = objetoIntent.getStringExtra("token")
-
         idUsuario = objetoIntent.getIntExtra("idUsuario",0)
         dirInicio  = objetoIntent.getStringExtra("dirInicio")
         latInicio  = objetoIntent.getDoubleExtra("latInicio",0.0)
@@ -64,17 +60,13 @@ class ProductoActivity : AppCompatActivity() {
         datosUsuario = objetoIntent.getStringExtra("userData")
 
 
-
-        //...........Obtengo Elementos.............................................
+        //----------------------- Obtengo Elementos -----------------------
 
         var verBolsaButton = findViewById<Button>(R.id.producto_verbolsaButton)
         var confirmarButton = findViewById<Button>(R.id.producto_confirmarButton)
 
-        //...........................................................................
 
-        enviarDatosAlServidor(idComercio)
-
-        //..........................................................................
+        //----------------------- Botones -----------------------
 
         verBolsaButton?.setOnClickListener {
             pantalla_bolsaDeProductos()
@@ -83,6 +75,10 @@ class ProductoActivity : AppCompatActivity() {
         confirmarButton?.setOnClickListener {
             confirmar_compra()
         }
+
+        //----------------------- Enviar Datos -----------------------
+
+        getComercioProductsFromServer(idComercio)
 
     }
 
@@ -96,12 +92,16 @@ class ProductoActivity : AppCompatActivity() {
             list.put(jsonob)
         }
 
-        //................................
+        //----------------------- Obtengo Elementos -----------------------
 
         var direccionEdittext = findViewById<EditText>(R.id.producto_direccionEditText)
         var direccionString = direccionEdittext.text
 
+        //----------------------- Checkeo Direccion -----------------------
+
         if( direccionString.isNotEmpty()){
+
+            //----------------------- Obtengo Lat/Long con GeoLocation -----------------------
 
             var address:List<Address> = coder.getFromLocationName( direccionString.toString() ,5)
 
@@ -110,9 +110,7 @@ class ProductoActivity : AppCompatActivity() {
                 val latitude = address.get(0).getLatitude()
                 val longitude = address.get(0).getLongitude()
 
-
                 val objetoJson= JSONObject()
-
                 objetoJson.put("iduser", idUsuario )
                 objetoJson.put("diri", dirInicio )
                 objetoJson.put("dirf", direccionString )
@@ -123,7 +121,7 @@ class ProductoActivity : AppCompatActivity() {
                 objetoJson.put("items", list )
 
 
-                //...............Mando al servidor............................
+                //----------------------- Mando al Servidor -----------------------
 
                 val url = config.URL.plus("/api/pedido/registrarPedido" )
 
@@ -133,8 +131,8 @@ class ProductoActivity : AppCompatActivity() {
 
                     Response.Listener<JSONObject> { response ->
 
+                        mensaje_Toast("Tu Pedido realizado Exitosamente! ")
                         pantalla_login()
-                        //mensaje_Toast(response.toString())
 
                     },
                     Response.ErrorListener {
@@ -165,14 +163,10 @@ class ProductoActivity : AppCompatActivity() {
 
     private fun pantalla_login() {
 
-
-        mensaje_Toast("Tu Pedido realizado Exitosamente! ")
         val intent:Intent = Intent(this,LoginActivity::class.java)
-        //intent.putExtra("datos","{}")
+
         intent.putExtra("token",tokenUsario)
         intent.putExtra("datos",datosUsuario)
-
-
 
         startActivity(intent)
     }
@@ -191,7 +185,7 @@ class ProductoActivity : AppCompatActivity() {
         Toast.makeText( this,s, Toast.LENGTH_LONG).show()
     }
 
-    private fun enviarDatosAlServidor( idcomecio: Int ) {
+    private fun getComercioProductsFromServer(idcomecio: Int ) {
 
         val url = config.URL.plus("/api/producto/productosPorComercio/"+ idcomecio.toString() )
 
@@ -257,7 +251,6 @@ class ProductoActivity : AppCompatActivity() {
             ) {
 
                 val jsonObject1 = productos.getJSONObject(position)
-
                 pantalla_productosDec(jsonObject1.toString())
 
             }
@@ -272,16 +265,14 @@ class ProductoActivity : AppCompatActivity() {
         intent.putExtra("token",tokenUsario)
         intent.putExtra("idComercio",idComercio)
         intent.putExtra("bolsa",bolsaDeCompra)
-
         intent.putExtra("dirInicio",dirInicio)
         intent.putExtra("latInicio",latInicio)
         intent.putExtra("longInicio",longInicio)
         intent.putExtra("idUsuario",idUsuario)
-
         intent.putExtra("userData",datosUsuario)
 
         startActivity(intent)
-        finish()
+
     }
 }
 

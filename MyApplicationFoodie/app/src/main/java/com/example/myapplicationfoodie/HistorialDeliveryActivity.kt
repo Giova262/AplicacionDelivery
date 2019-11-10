@@ -12,16 +12,16 @@ import org.json.JSONArray
 
 class HistorialDeliveryActivity : AppCompatActivity() {
 
-    var tokenUsario :String = "-1"
-    var datosUsuario :String = "-1"
-    var idUsuario: Int = 0
-    lateinit var pendientes: JSONArray
+    private var tokenUsario :String = "-1"
+    private var datosUsuario :String = "-1"
+    private var idUsuario: Int = 0
+    private lateinit var pendientes: JSONArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_historial_delivery)
 
-        //.....................Recibo datos ....................................
+        //----------------------- Recibo Datos -----------------------
 
         val objetoIntent : Intent =intent
 
@@ -30,7 +30,7 @@ class HistorialDeliveryActivity : AppCompatActivity() {
         pendientes = JSONArray( objetoIntent.getStringExtra("pedidiosPendientes"))
         datosUsuario = objetoIntent.getStringExtra("datos")
 
-        //....................Llenar lista.......................................
+        //----------------------- Llenar lista -----------------------
 
         fillList()
     }
@@ -45,15 +45,13 @@ class HistorialDeliveryActivity : AppCompatActivity() {
 
             val jsonObject1 = pendientes.getJSONObject(i)
             val value1 = jsonObject1.getInt("ped_id")
-            val value2 = jsonObject1.getInt("ped_deliveryid")
             val value3 = jsonObject1.getInt("ped_estado")
 
             var mensaje:String = "Empty"
 
             if(value3==3){
-                mensaje = "IdPedido :${value1}  Estado : Entregado "
+                mensaje = "IdPedido: ${value1}  Estado: Entregado "
             }
-
 
             list.add(mensaje)
         }
@@ -72,14 +70,10 @@ class HistorialDeliveryActivity : AppCompatActivity() {
                 position: Int, id: Long
             ) {
 
-                val jsonObject1 = pendientes.getJSONObject(position)
+               // val jsonObject1 = pendientes.getJSONObject(position)
 
-                //pantalla_pedidoDec(jsonObject1.toString())
-
-                mensaje_Toast( position.toString() )
             }
         }
-
 
     }
 
@@ -87,16 +81,4 @@ class HistorialDeliveryActivity : AppCompatActivity() {
         Toast.makeText( this,s, Toast.LENGTH_LONG).show()
     }
 
-    private fun pantalla_pedidoDec(s: String) {
-        val intent: Intent = Intent(this,PedidoDescActivity::class.java)
-
-        intent.putExtra("token",tokenUsario)
-        intent.putExtra("idUsuario",idUsuario)
-        intent.putExtra("pedido",s)
-        intent.putExtra("pedidos",pendientes.toString() )
-        intent.putExtra("datos",datosUsuario)
-
-        startActivity(intent)
-        finish()
-    }
 }

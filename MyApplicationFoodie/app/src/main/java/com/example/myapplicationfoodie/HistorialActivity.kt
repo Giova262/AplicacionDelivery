@@ -17,15 +17,15 @@ import org.json.JSONObject
 
 class HistorialActivity : AppCompatActivity() {
 
-    var tokenUsario :String = "-1"
-    var idUsuario: Int = 0
-    lateinit var pendientes: JSONArray
+    private var tokenUsario :String = "-1"
+    private var idUsuario: Int = 0
+    private lateinit var pendientes: JSONArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_historial)
 
-        //.....................Recibo datos ....................................
+        //----------------------- Recibo Datos -----------------------
 
         val objetoIntent : Intent =intent
 
@@ -33,21 +33,20 @@ class HistorialActivity : AppCompatActivity() {
         idUsuario =  objetoIntent.getIntExtra("iduser",0)
 
 
-        //.........................................................................
+        //----------------------- Conecto con el Servidor -----------------------
 
-        enviarDatosAlServidor()
+        getHistorialFromServidor()
+
     }
 
-    private fun enviarDatosAlServidor() {
+    private fun getHistorialFromServidor() {
 
         val url = config.URL.plus("/api/pedido/getPedidosUsuario/"+ idUsuario.toString() )
 
         val objetoJson= JSONObject()
         objetoJson.put("iduser", idUsuario )
 
-
-        //...............Mando al servidor............................
-
+        //----------------------- Mando al servidor -----------------------
 
         val queue = Volley.newRequestQueue( this )
         val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
@@ -56,8 +55,9 @@ class HistorialActivity : AppCompatActivity() {
 
                 val jsonob: JSONObject = JSONObject(response.toString())
                 pendientes = jsonob.getJSONArray("pedidos")
+
+                //----------------------- Lleno la ListView -----------------------
                 fillList()
-                //mensaje_Toast(response.toString())
 
             },
             Response.ErrorListener {
@@ -89,6 +89,8 @@ class HistorialActivity : AppCompatActivity() {
 
         val list = ArrayList<String>()
 
+        var mensaje:String
+
         for (i in 0 until pendientes.length()) {
 
             val jsonObject1 = pendientes.getJSONObject(i)
@@ -96,10 +98,8 @@ class HistorialActivity : AppCompatActivity() {
             val value2 = jsonObject1.getInt("ped_deliveryid")
             val value3 = jsonObject1.getInt("ped_estado")
 
-            var mensaje:String = "Empty"
-
             if(value3==3){
-                mensaje = "IdPedido :${value1} IdDelivery :${value2} Estado : Entregado "
+                mensaje = "IdPedido: ${value1} IdDelivery: ${value2} Estado: Entregado "
                 list.add(mensaje)
             }
 
@@ -124,7 +124,6 @@ class HistorialActivity : AppCompatActivity() {
 
             }
         }
-
 
     }
 }

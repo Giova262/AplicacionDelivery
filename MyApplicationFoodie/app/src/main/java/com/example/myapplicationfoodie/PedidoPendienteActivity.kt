@@ -13,16 +13,16 @@ import org.json.JSONObject
 
 class PedidoPendienteActivity : AppCompatActivity() {
 
-    var tokenUsario :String = "-1"
-    var datosUsuario :String = "-1"
-    var idUsuario: Int = 0
-    lateinit var pendientes: JSONArray
+    private var tokenUsario :String = "-1"
+    private var datosUsuario :String = "-1"
+    private var idUsuario: Int = 0
+    private lateinit var pendientes: JSONArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pedido_pendiente)
 
-        //.....................Recibo datos ....................................
+        //----------------------- Recibo Datos -----------------------
 
         val objetoIntent : Intent =intent
 
@@ -31,7 +31,7 @@ class PedidoPendienteActivity : AppCompatActivity() {
         pendientes = JSONArray( objetoIntent.getStringExtra("pedidiosPendientes"))
         datosUsuario = objetoIntent.getStringExtra("datos")
 
-        //....................Llenar lista.......................................
+        //----------------------- Lleno Lista -----------------------
 
         fillList()
 
@@ -43,21 +43,19 @@ class PedidoPendienteActivity : AppCompatActivity() {
 
         val list = ArrayList<String>()
 
+        var mensaje:String
+
         for (i in 0 until pendientes.length()) {
 
             val jsonObject1 = pendientes.getJSONObject(i)
             val value1 = jsonObject1.getInt("ped_id")
-            val value2 = jsonObject1.getInt("ped_deliveryid")
             val value3 = jsonObject1.getInt("ped_estado")
-
-            var mensaje:String = "Empty"
 
             if(value3==1){
                 mensaje = "IdPedido :${value1}  Estado : Pendiente "
             }else{
                 mensaje = "IdPedido :${value1}  Estado : Enviando"
             }
-
 
             list.add(mensaje)
         }
@@ -76,14 +74,12 @@ class PedidoPendienteActivity : AppCompatActivity() {
                 position: Int, id: Long
             ) {
 
+                //----------------------- OnClick de cada Item -----------------------
                 val jsonObject1 = pendientes.getJSONObject(position)
-
                 pantalla_pedidoDec(jsonObject1.toString())
 
-                //mensaje_Toast( position.toString() )
             }
         }
-
 
     }
 
@@ -93,9 +89,7 @@ class PedidoPendienteActivity : AppCompatActivity() {
 
     private fun pantalla_pedidoDec(s: String) {
 
-        mensaje_Toast("Antes de pasar pantalla paso este id : "+idUsuario.toString())
         val intent:Intent = Intent(this,PedidoDescActivity::class.java)
-
 
         intent.putExtra("token",tokenUsario)
         intent.putExtra("idUsuario",idUsuario)
@@ -104,6 +98,6 @@ class PedidoPendienteActivity : AppCompatActivity() {
         intent.putExtra("datos",datosUsuario)
 
         startActivity(intent)
-        finish()
+
     }
 }

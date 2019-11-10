@@ -10,7 +10,6 @@ import android.widget.ListView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
@@ -18,18 +17,17 @@ import org.json.JSONObject
 
 class PendientesActivity : AppCompatActivity() {
 
-    var tokenUsario :String = "-1"
-    var idUsuario: Int = 0
-    lateinit var pendientes: JSONArray
-    var datosUsuario :String = "-1"
-
+    private var tokenUsario :String = "-1"
+    private var idUsuario: Int = 0
+    private lateinit var pendientes: JSONArray
+    private var datosUsuario :String = "-1"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pendientes)
 
-        //.....................Recibo datos ....................................
+        //----------------------- Recibir Datos -----------------------
 
         val objetoIntent : Intent =intent
 
@@ -38,22 +36,18 @@ class PendientesActivity : AppCompatActivity() {
         datosUsuario = objetoIntent.getStringExtra("datos")
 
 
-        //.........................................................................
+        //----------------------- Enviar Datos -----------------------
 
-        enviarDatosAlServidor()
+        getPedidosPorUsuario()
 
     }
 
-    private fun enviarDatosAlServidor() {
+    private fun getPedidosPorUsuario() {
 
         val url = config.URL.plus("/api/pedido/getPedidosUsuario/"+ idUsuario.toString() )
 
         val objetoJson= JSONObject()
         objetoJson.put("iduser", idUsuario )
-
-
-        //...............Mando al servidor............................
-
 
         val queue = Volley.newRequestQueue( this )
         val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
@@ -62,8 +56,8 @@ class PendientesActivity : AppCompatActivity() {
 
                 val jsonob: JSONObject = JSONObject(response.toString())
                 pendientes = jsonob.getJSONArray("pedidos")
+
                 fillList()
-                //mensaje_Toast(response.toString())
 
             },
             Response.ErrorListener {
@@ -95,6 +89,8 @@ class PendientesActivity : AppCompatActivity() {
 
         val list = ArrayList<String>()
 
+        var mensaje:String
+
         for (i in 0 until pendientes.length()) {
 
             val jsonObject1 = pendientes.getJSONObject(i)
@@ -102,14 +98,12 @@ class PendientesActivity : AppCompatActivity() {
             val value2 = jsonObject1.getInt("ped_deliveryid")
             val value3 = jsonObject1.getInt("ped_estado")
 
-            var mensaje:String = "Empty"
-
             if(value3==1){
-                 mensaje = "IdPedido :${value1} IdDelivery :${value2} Estado : Pendiente "
-            }else{
-                 mensaje = "IdPedido :${value1} IdDelivery :${value2} Estado : Enviando"
-            }
+                 mensaje = "IdPedido: ${value1} IdDelivery: ${value2} Estado: Pendiente"
 
+            }else{
+                 mensaje = "IdPedido: ${value1} IdDelivery: ${value2} Estado: Enviando"
+            }
 
             list.add(mensaje)
         }
@@ -128,17 +122,17 @@ class PendientesActivity : AppCompatActivity() {
                 position: Int, id: Long
             ) {
 
+                //--------------------- OnClick de cada Item ---------------------
                 val jsonObject1 = pendientes.getJSONObject(position)
-
                 pantalla_mipedidoopciones(jsonObject1.toString())
 
             }
         }
 
-
     }
 
     private fun pantalla_mipedidoopciones(pedido: String) {
+
         val intent:Intent = Intent(this,PedidoOpcionesClienteActivity::class.java)
 
         intent.putExtra("token",tokenUsario)
@@ -147,6 +141,6 @@ class PendientesActivity : AppCompatActivity() {
         intent.putExtra("datos",datosUsuario)
 
         startActivity(intent)
-       // finish()
+
     }
 }
