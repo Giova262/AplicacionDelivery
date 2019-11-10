@@ -64,6 +64,6 @@ class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
         intent.putExtra("long",longitud)
 
         startActivity(intent)
-        //finish()
+        //EFfinish()
     }
 }

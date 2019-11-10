@@ -21,15 +21,14 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.*
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private var filePath: Uri? = null
     private val PICK_IMAGE_REQUEST = 71
-    private var fotoUrl:String = ""
-
-    //Firebase
-    var storage: FirebaseStorage? = null
-    var storageReference: StorageReference? = null
+    private var fotoUrl:String = "defecto"
+    private var rolUsuario: Int = -1
+    private var storage: FirebaseStorage? = null
+    private var storageReference: StorageReference? = null
 
 
 
@@ -37,29 +36,43 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        //...........Obtengo Elementos...........................
-
-        var mensajeTextView = findViewById<TextView>(R.id.register_mensajeTextView)
-
-        var nombreEditText = findViewById<EditText>( R.id.register_nombreEditText )
-        var passEditText = findViewById<EditText>( R.id.register_passEditText )
-        var emailEditText = findViewById<EditText>( R.id.register_emailEditText )
-       // var fotoEditText = findViewById<EditText>(R.id.register_fotoEditText)
-        var clienteCheckBox = findViewById<CheckBox>(R.id.register_clienteCheckBox)
-        var deliveryCheckBox = findViewById<CheckBox>(R.id.register_deliveryCheckBox)
+        //----------------------- Obtengo Elementos -----------------------
 
         var registrarBoton = findViewById<Button>(R.id.register_registrarButton)
         var elegirfotoBoton = findViewById<Button>(R.id.register_elegirfotoButton)
-        var subirfotoBoton = findViewById<Button>(R.id.register_subirfotoButton)
+       // var subirfotoBoton = findViewById<Button>(R.id.register_subirfotoButton)
 
-        //...................Firebase store.......................
+        var imagen = findViewById<ImageView>(R.id.register_imageView)
+
+        //----------------------- Foto por Defecto -----------------------
+
+        imagen.setImageDrawable(getResources().getDrawable(R.drawable.user))
+
+
+        //----------------------- Spinner -----------------------
+
+        val spinner: Spinner = findViewById(R.id.register_spinner)
+
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.opciones,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+
+        spinner.onItemSelectedListener = this
+
+        //----------------------- Firebase Store -----------------------
 
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.getReference()
 
-        //........................BOTONES................................
+        //.----------------------- Botones -----------------------
 
-        subirfotoBoton.setEnabled(false)
+        //subirfotoBoton.setEnabled(false)
 
         elegirfotoBoton?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
@@ -67,109 +80,21 @@ class RegisterActivity : AppCompatActivity() {
             }
         })
 
-        subirfotoBoton?.setOnClickListener(object : View.OnClickListener {
+       /* subirfotoBoton?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 uploadImage()
             }
-        })
-
-        //................Enviar datos..............................
+        })*/
 
         registrarBoton?.setOnClickListener {
 
-
-            if( fotoUrl != ""){
-
-                if(nombreEditText.text.isNotBlank() && passEditText.text.isNotBlank() &&
-                    emailEditText.text.isNotBlank() ){
-
-
-                    //............Chekeo que elija un rol..............................
-
-                    if ( clienteCheckBox.isChecked && !deliveryCheckBox.isChecked ){
-
-
-                        //..............Genero Json Para enviar al servidor.................
-
-                        var nombre = nombreEditText.text
-                        var pass = passEditText.text
-                        var mail = emailEditText.text
-                        var rol = 0
-                        var puntaje = 0
-                        var nivel = 0
-                        var foto = fotoUrl
-                        var cantEnvios = 0
-                        var redsocial = "ninguna"
-                        var uidfirebase = "-1"
-
-                        val jsonObject = JSONObject()
-                        jsonObject.put("nombre",nombre)
-                        jsonObject.put("pass",pass)
-                        jsonObject.put("mail",mail)
-                        jsonObject.put("rol",rol)
-                        jsonObject.put("puntaje",puntaje)
-                        jsonObject.put("nivel",nivel)
-                        jsonObject.put("foto",foto)
-                        jsonObject.put("cantEnvios",cantEnvios)
-                        jsonObject.put("redsocial",redsocial)
-                        jsonObject.put("uidfirebase",uidfirebase)
-
-                        //...................................................................
-
-                        enviarDatosAlServidor(jsonObject)
-
-                    }
-
-                    else if ( !clienteCheckBox.isChecked && deliveryCheckBox.isChecked ){
-
-                        //..............Genero Json Para enviar al servidor.................
-
-                        var nombre = nombreEditText.text
-                        var pass = passEditText.text
-                        var mail = emailEditText.text
-                        var rol = 1
-                        var puntaje = 0
-                        var nivel = 0
-                        var foto = fotoUrl
-                        var cantEnvios = 0
-                        var redsocial = "ninguna"
-                        var uidfirebase = "-1"
-
-                        val jsonObject = JSONObject()
-                        jsonObject.put("nombre",nombre)
-                        jsonObject.put("pass",pass)
-                        jsonObject.put("mail",mail)
-                        jsonObject.put("rol",rol)
-                        jsonObject.put("puntaje",puntaje)
-                        jsonObject.put("nivel",nivel)
-                        jsonObject.put("foto",foto)
-                        jsonObject.put("cantEnvios",cantEnvios)
-                        jsonObject.put("redsocial",redsocial)
-                        jsonObject.put("uidfirebase",uidfirebase)
-
-                        //...................................................................
-
-                        enviarDatosAlServidor(jsonObject)
-
-                    }
-                    else {
-                        mensajeTextView.setText("Debes Elegir un Rol")
-                    }
-                    //.........................................................
-
-                }else{
-
-                    mensajeTextView.setText("Campos sin completar. Rellena todos los campos Por Favor!")
-                }
+            if( !fotoUrl.equals("defecto")){
+                uploadImage()
 
             }else{
-                mensaje_Toast("Debes subir la foto antes , presiona el boton Subir")
+                registerToServer()
             }
-
         }
-
-        //.........................................................
-
     }
 
     private fun chooseImage() {
@@ -182,8 +107,7 @@ class RegisterActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-       // var fotoEditText = findViewById<EditText>(R.id.register_fotoEditText)
-        var subirfotoBoton = findViewById<Button>(R.id.register_subirfotoButton)
+        //var subirfotoBoton = findViewById<Button>(R.id.register_subirfotoButton)
         var imagen = findViewById<ImageView>(R.id.register_imageView)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK
@@ -195,7 +119,11 @@ class RegisterActivity : AppCompatActivity() {
 
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 imagen?.setImageBitmap(bitmap)
-                subirfotoBoton.setEnabled(true)
+               // subirfotoBoton.setEnabled(true)
+
+                //----------------------- Cambio la fotoUrl a cualquier string que no sea Default -----------------------
+
+                fotoUrl = "No Default"
 
 
             } catch (e: IOException) {
@@ -206,8 +134,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun uploadImage() {
-
-       // var fotoEditText = findViewById<EditText>(R.id.register_fotoEditText)
 
         if (filePath != null) {
             val progressDialog = ProgressDialog(this)
@@ -247,20 +173,24 @@ class RegisterActivity : AppCompatActivity() {
 
                 if (task.isSuccessful) {
                     val downloadUri = task.result
+
+                    //----------------------- URL Real en Fire-Base -----------------------
+
                     fotoUrl = downloadUri.toString()
-                   // println("url:"  + downloadUri ) //aca tengo la URL
 
-                   // fotoEditText.setText( downloadUri.toString() )
+                    //----------------------- Registro -----------------------
 
+                    registerToServer()
 
                 } else {
+
                     // Handle failures
                 }
             }
 
         }else{
 
-            mensaje_Toast("Error : No hay foto para subir")
+            mensaje_Toast("Error : No hay foto para Subir")
         }
     }
 
@@ -269,9 +199,9 @@ class RegisterActivity : AppCompatActivity() {
         startActivity(intent)*/
     }
 
-    private fun pantalla_loginUsuario() {
-        val intent:Intent = Intent(this,LoginActivity::class.java)
-        startActivity(intent)
+    private fun pantalla_loginCliente() {
+       /* val intent:Intent = Intent(this,LoginActivity::class.java)
+        startActivity(intent)*/
     }
 
     private fun pantalla_main() {
@@ -284,28 +214,48 @@ class RegisterActivity : AppCompatActivity() {
         Toast.makeText( this,s, Toast.LENGTH_LONG).show()
     }
 
-    private fun enviarDatosAlServidor(jsonObject: JSONObject) {
+    private fun registerToServer() {
+
+        //----------------------- Obtengo Elementos -----------------------
+
+        var nombreEditText = findViewById<EditText>( R.id.register_nombreEditText )
+        var passEditText = findViewById<EditText>( R.id.register_passEditText )
+        var emailEditText = findViewById<EditText>( R.id.register_emailEditText )
+
+        //-----------------------  Creo el Json -----------------------
+
+        val jsonObject1 = JSONObject()
+        jsonObject1.put("nombre",nombreEditText.text)
+        jsonObject1.put("pass",passEditText.text)
+        jsonObject1.put("mail",emailEditText.text)
+        jsonObject1.put("rol",rolUsuario)
+        jsonObject1.put("puntaje",0)
+        jsonObject1.put("nivel",0)
+        jsonObject1.put("foto",fotoUrl)
+        jsonObject1.put("cantEnvios",0)
+        jsonObject1.put("redsocial","Ninguna")
+        jsonObject1.put("uidfirebase","-1")
+
+
+        //----------------------- Coneccion con Servidor -----------------------
+
 
         val queue = Volley.newRequestQueue( this )
-        //val url = "https://polar-stream-82449.herokuapp.com/api/user/register"
+
         val url = config.URL.plus("/api/user/register")
 
-
-        val jsonObjectRequest = JsonObjectRequest(url, jsonObject,
+        val jsonObjectRequest = JsonObjectRequest(url, jsonObject1,
 
             Response.Listener { response ->
-
-                //................ Respuesta Json del Servidor...................
 
                 var strResp = response.toString()
                 val jsonob: JSONObject = JSONObject(strResp)
                 val mensaje = jsonob.getString("message")
-                val token = jsonob.getString("token")
-                mensaje_Toast(mensaje + token )
+
+                mensaje_Toast(mensaje)
 
                 pantalla_main()
 
-                //................................................................
             },
             Response.ErrorListener { error ->
 
@@ -314,6 +264,14 @@ class RegisterActivity : AppCompatActivity() {
         )
 
         queue.add( jsonObjectRequest )
+
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        rolUsuario = position
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
 
     }
 }

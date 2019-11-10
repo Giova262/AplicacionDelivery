@@ -255,7 +255,7 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun pantalla_login() {
 
-        mensaje_Toast("Cambios realizados Exitosamente! ")
+       // mensaje_Toast("Cambios realizados Exitosamente! ")
         val intent:Intent = Intent(this,LoginActivity::class.java)
         intent.putExtra("token",tokenUsario)
         intent.putExtra("datos",datosUsuario)
@@ -312,6 +312,7 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val jsonob: JSONObject = JSONObject(strResp)
 
                 datosUsuario =  jsonob.toString()
+                mensaje_Toast("Cambios realizados Exitosamente! ")
                 pantalla_login()
 
             },

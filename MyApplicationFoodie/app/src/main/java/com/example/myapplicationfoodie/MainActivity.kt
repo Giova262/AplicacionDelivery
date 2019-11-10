@@ -27,9 +27,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
     private var callbackManager: CallbackManager? = null
     private val TAG = "FaceLog"
-    private lateinit var auth: FirebaseAuth// ...
+    private lateinit var auth: FirebaseAuth
     private var tokenRedSocial : String? = null
-    val jsonObject = JSONObject()
     private var rolDelUsuario = 0
 
 
@@ -37,23 +36,24 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Initialize Firebase Auth
+        //----------------------- Initialize FIRE-BASE Auth -----------------------
+
         auth = FirebaseAuth.getInstance()
 
-        // Initialize Facebook Login button
+        //----------------------- Initialize Facebook Login button -----------------------
+
         callbackManager = CallbackManager.Factory.create()
 
+        //----------------------- Get Elements -----------------------
 
-        //................Obtengo Elementos............................
-
-        var emailEditText = findViewById<EditText>( R.id.main_emailEditText )
+        val emailEditText = findViewById<EditText>( R.id.main_emailEditText )
         val passEditText = findViewById<EditText>( R.id.main_passEditText )
-        var buttonFacebookLogin = findViewById<LoginButton>(R.id.login_button)
-        var buttonRegistrar = findViewById<Button>(R.id.main_registrarBoton)
-        var buttonEntrar = findViewById<Button>(R.id.main_entrarBoton)
+        val buttonFacebookLogin = findViewById<LoginButton>(R.id.login_button)
+        val buttonRegistrar = findViewById<Button>(R.id.main_registrarBoton)
+        val buttonEntrar = findViewById<Button>(R.id.main_entrarBoton)
         val spinner: Spinner = findViewById(R.id.main_spinner)
 
-        //...............Spiner...............................................................
+        //----------------------- Spinner -----------------------
 
         ArrayAdapter.createFromResource(
             this,
@@ -67,11 +67,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
         spinner.onItemSelectedListener = this
 
-        //...........................BOTONES..............................................
+        //----------------------- Buttons -----------------------
         
         buttonEntrar?.setOnClickListener {
-
-           //pantalla_pruebas()
 
             var mail = emailEditText.text
             var pass = passEditText.text
@@ -84,8 +82,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
             jsonObject.put("rol",rol)
             jsonObject.put("idToken",uidfirebase)
 
-            enviarDatosAlServidor(jsonObject)
-
+            loginToServer(jsonObject)
         }
 
         buttonRegistrar?.setOnClickListener {
@@ -96,67 +93,65 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
             FacebookCallback<LoginResult> {
 
             override fun onSuccess(loginResult: LoginResult) {
-                //............. Login Exitosamente usando Facebook........................................
+
                 handleFacebookAccessToken(loginResult.accessToken)
             }
 
             override fun onCancel() {
+
                 Log.d(TAG, "facebook:onCancel")
             }
 
             override fun onError(error: FacebookException) {
+
                 Log.d(TAG, "facebook:onError", error)
             }
         })
+
+        //-----------------------  End  -----------------------
+
     }
 
-    private fun enviarDatosAlServidor(jsonObject: JSONObject) {
+    private fun loginToServer(jsonObject: JSONObject) {
+
+        //----------------------- URL -----------------------
+
+        val url = config.URL.plus("/api/user/login")
+
+        //----------------------- Send data to Server -----------------------
 
         val queue = Volley.newRequestQueue( this )
-        val url = config.URL.plus("/api/user/login")
 
         val jsonObjectRequest = JsonObjectRequest(url, jsonObject,
 
             Response.Listener { response ->
 
-                //................ Respuesta Json del Servidor...................
-
                 var strResp = response.toString()
-                val jsonob: JSONObject = JSONObject(strResp)
 
+                val jsonob: JSONObject = JSONObject(strResp)
                 val mensaje = jsonob.getString("message")
                 val status = jsonob.getInt("status")
-                val token = jsonob.getString("token")
+                tokenRedSocial = jsonob.getString("token")
 
-
-                //........Guardo el Token de mi app ..............................
-
-                tokenRedSocial = token
-
-                //.........Si status es igual a 1 entonces logeo perfectamente
                 if(status == 1){
 
                     val datos = jsonob.getJSONObject("dato")
 
-
                     if( rolDelUsuario == 0){
-
-                        pantalla_login( datos.toString() )
+                        pantalla_loginCliente( datos.toString() )
                     }
-
-                    if( rolDelUsuario == 1){
-
+                    else if( rolDelUsuario == 1){
                         pantalla_loginDelivery( datos.toString() )
+                    }else{
+                        mensaje_Toast("Rol ${rolDelUsuario} no soportado por la app ")
                     }
-
 
                 }else mensaje_Toast(mensaje)
 
-                //......................................................
             },
             Response.ErrorListener { error ->
 
-                mensaje_Toast( "Error en respuesta del servidor!" )
+                mensaje_Toast( "Error en respuesta del Servidor!" )
                 error.printStackTrace()
             }
         )
@@ -170,16 +165,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
         intent.putExtra("token",tokenRedSocial)
         startActivity(intent)
         finish()
-
     }
 
     private fun pantalla_registro() {
         val intent:Intent = Intent(this,RegisterActivity::class.java)
         startActivity(intent)
-        //finish()
     }
 
-    private fun pantalla_login( datos :String ) {
+    private fun pantalla_loginCliente(datos :String ) {
         val intent:Intent = Intent(this,LoginActivity::class.java)
         intent.putExtra("datos",datos)
         intent.putExtra("token",tokenRedSocial)
@@ -187,7 +180,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
         finish()
     }
 
-    private fun pantalla_pruebas( ) {
+    private fun pantalla_pruebas() {
         val intent:Intent = Intent(this,MapsActivity::class.java)
         startActivity(intent)
         finish()
@@ -198,27 +191,27 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        // Pass the activity result back to the Facebook SDK
+        //----------------------- Pass the activity result back to the Facebook SDK -----------------------
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager?.onActivityResult(requestCode, resultCode, data)
     }
 
     public override fun onStart() {
-        // Check if user is signed in (non-null) and update UI accordingly.
+
         super.onStart()
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
 
-        // .........Verifico Token de Facebook usando Firebase................................................
+        //----------------------- Verifico Token de Facebook usando Firebase -----------------------
 
         val credential = FacebookAuthProvider.getCredential(token.token)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
 
-                    // ..................Obtengo el Token de Firebase......................................................
+                    //----------------------- Obtengo el Token de Firebase -----------------------
 
                     Log.d(TAG, "signInWithCredential:success")
 
@@ -227,7 +220,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
                             if (task2.isSuccessful) {
 
-                                // ...........Envio Token al Servidor...........
+                                // ----------------------- Envio Token de Fire-base al Servidor -----------------------
 
                                 val idToken = task2.result?.token
 
@@ -237,13 +230,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
                                 jsonObject2.put("rol",rolDelUsuario )
                                 jsonObject2.put("idToken",idToken)
 
-                               // mensaje_Toast("token de firebase :"+idToken)
-
-                                enviarDatosAlServidor(jsonObject2)
+                                loginToServer(jsonObject2)
 
                             } else {
-                                // Handle error -> task.getException();
-                                mensaje_Toast("Ocurrio un error en getIdToken")
+
+                                mensaje_Toast("Error Token de Fire-base")
                             }
                         }
 
@@ -263,5 +254,5 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
     override fun onNothingSelected(parent: AdapterView<*>?) {
 
     }
-    //..
+
 }
