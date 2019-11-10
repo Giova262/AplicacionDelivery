@@ -28,63 +28,23 @@ import kotlin.collections.HashMap
 
 class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    var tokenUsario :String = "-1"
-    var idUsuario: Int = 0
-    var rolUsuario: Int = -1
-    lateinit var datosUsuario:String
-
-    //...........
+    private var tokenUsario :String = "-1"
+    private var idUsuario: Int = 0
+    private var rolUsuario: Int = -1
+    private lateinit var datosUsuario:String
     private var filePath: Uri? = null
     private val PICK_IMAGE_REQUEST = 71
     private var fotoUrl:String = ""
-    var storage: FirebaseStorage? = null
-    var storageReference: StorageReference? = null
-    //............
+    private var fotoUrlTemp:String = ""
+    private var storage: FirebaseStorage? = null
+    private var storageReference: StorageReference? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editar)
 
-        //...........Obtengo Elementos...........................
-
-        var mensajeTextView = findViewById<TextView>(R.id.editar_mensajeTextView)
-
-        var nombreEditText = findViewById<EditText>( R.id.editar_nombreEditText )
-        var passEditText = findViewById<EditText>( R.id.editar_passEditText )
-        var emailEditText = findViewById<EditText>( R.id.editar_mailEditText )
-       // var fotoEditText = findViewById<EditText>(R.id.editar_fotoEditText)
-        var redsocialEditText = findViewById<EditText>(R.id.editar_redsocialEditText)
-
-        var cambiarBoton = findViewById<Button>(R.id.editar_cambiarButton)
-        var volverBoton = findViewById<Button>(R.id.editar_volverButton)
-
-        var elegirfotoBoton = findViewById<Button>(R.id.editar_elegirbutton)
-        var subirfotoBoton = findViewById<Button>(R.id.editar_subirbutton)
-        var imagen = findViewById<ImageView>(R.id.editar_imageView)
-
-        //...................Firebase store.......................
-
-        storage = FirebaseStorage.getInstance()
-        storageReference = storage!!.getReference()
-
-
-        //................BOTONES.......................................
-
-        subirfotoBoton.setEnabled(false)
-
-        elegirfotoBoton?.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-                chooseImage()
-            }
-        })
-
-        subirfotoBoton?.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-                uploadImage()
-            }
-        })
-
-        //.....................Recibo datos ....................................
+        //----------------------- Recibo Datos -----------------------
 
         val objetoIntent : Intent =intent
 
@@ -94,24 +54,33 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         val usuario: JSONObject = JSONObject(datosUsuario)
 
-        //.......................................................................
+        //----------------------- Obtengo Elementos -----------------------
+
+        val nombreEditText = findViewById<EditText>( R.id.editar_nombreEditText )
+        val passEditText = findViewById<EditText>( R.id.editar_passEditText )
+        val emailEditText = findViewById<EditText>( R.id.editar_mailEditText )
+        val redsocialEditText = findViewById<EditText>(R.id.editar_redsocialEditText)
+        val cambiarBoton = findViewById<Button>(R.id.editar_cambiarButton)
+        val volverBoton = findViewById<Button>(R.id.editar_volverButton)
+        val elegirfotoBoton = findViewById<Button>(R.id.editar_elegirbutton)
+        val imagen = findViewById<ImageView>(R.id.editar_imageView)
+
+        //----------------------- Muestro Datos -----------------------
 
         nombreEditText.setText( usuario.getString("nombre")  )
         passEditText.setText( usuario.getString("pass")  )
         emailEditText.setText( usuario.getString("mail")  )
-        //fotoEditText.setText( usuario.getString("foto")  )
         redsocialEditText.setText( usuario.getString("redsocial")  )
 
-        //...........................FOTO..............................................
-
+        //----------------------- Foto de Usuario  -----------------------
 
         fotoUrl = usuario.getString("foto")
+        fotoUrlTemp = usuario.getString("foto")
 
         Picasso.get().load( usuario.getString("foto") ).into(imagen, object: com.squareup.picasso.Callback {
 
             override fun onError(e: Exception?) {
 
-                mensaje_Toast("Imagen por defecto")
                 imagen.setImageDrawable(getResources().getDrawable(R.drawable.user))
             }
 
@@ -120,7 +89,37 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         })
 
-        //...............................SPINER.....................................
+        //----------------------- Fire-base Store -----------------------
+
+        storage = FirebaseStorage.getInstance()
+        storageReference = storage!!.getReference()
+
+        //----------------------- Botones -----------------------
+
+        elegirfotoBoton?.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+                chooseImage()
+            }
+        })
+
+        cambiarBoton?.setOnClickListener {
+
+            if( !fotoUrl.equals( fotoUrlTemp )){
+
+                uploadImage()
+
+            }else{
+
+                enviarDatosAlServidor()
+            }
+        }
+
+        volverBoton?.setOnClickListener {
+
+            pantalla_login()
+        }
+
+        //----------------------- Spinner -----------------------
 
         val spinner: Spinner = findViewById(R.id.editar_spinner)
 
@@ -136,29 +135,6 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         spinner.onItemSelectedListener = this
 
-        //...........................................................................
-
-        cambiarBoton?.setOnClickListener {
-            
-                val jsonObject = JSONObject()
-                jsonObject.put("id",idUsuario)
-                jsonObject.put("nombre",nombreEditText.text)
-                jsonObject.put("mail",emailEditText.text)
-                jsonObject.put("pass",passEditText.text)
-                jsonObject.put("rol",rolUsuario)
-                jsonObject.put("foto",fotoUrl )
-                jsonObject.put("redsocial",redsocialEditText.text)
-
-                enviarDatosAlServidor( jsonObject )
-
-        }
-
-        volverBoton?.setOnClickListener {
-
-            pantalla_login()
-        }
-
-
     }
 
     private fun chooseImage() {
@@ -171,8 +147,6 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        // var fotoEditText = findViewById<EditText>(R.id.register_fotoEditText)
-        var subirfotoBoton = findViewById<Button>(R.id.editar_subirbutton)
         var imagen = findViewById<ImageView>(R.id.editar_imageView)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK
@@ -184,7 +158,8 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 imagen?.setImageBitmap(bitmap)
-                subirfotoBoton.setEnabled(true)
+
+                fotoUrl = "Nueva"  // Pongo cualquier cosa con tal que sea distinto al original
 
 
             } catch (e: IOException) {
@@ -195,8 +170,6 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun uploadImage() {
-
-        // var fotoEditText = findViewById<EditText>(R.id.register_fotoEditText)
 
         if (filePath != null) {
             val progressDialog = ProgressDialog(this)
@@ -218,8 +191,6 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 }
                 ?.addOnSuccessListener {
 
-                    mensaje_Toast( "Foto subida satisfactoriamente." )
-
                 }
 
             uploadTask?.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
@@ -235,12 +206,11 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             })?.addOnCompleteListener { task ->
 
                 if (task.isSuccessful) {
+
                     val downloadUri = task.result
                     fotoUrl = downloadUri.toString()
-                    // println("url:"  + downloadUri ) //aca tengo la URL
 
-                    // fotoEditText.setText( downloadUri.toString() )
-
+                    enviarDatosAlServidor()
 
                 } else {
                     // Handle failures
@@ -255,7 +225,6 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun pantalla_login() {
 
-       // mensaje_Toast("Cambios realizados Exitosamente! ")
         val intent:Intent = Intent(this,LoginActivity::class.java)
         intent.putExtra("token",tokenUsario)
         intent.putExtra("datos",datosUsuario)
@@ -267,17 +236,29 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         Toast.makeText( this,s, Toast.LENGTH_LONG).show()
     }
 
-    private fun enviarDatosAlServidor( jsonObject :JSONObject) {
+    private fun enviarDatosAlServidor() {
 
-        val url = config.URL.plus("/api/user/1" )
+        val nombreEditText = findViewById<EditText>( R.id.editar_nombreEditText )
+        val passEditText = findViewById<EditText>( R.id.editar_passEditText )
+        val emailEditText = findViewById<EditText>( R.id.editar_mailEditText )
+        val redsocialEditText = findViewById<EditText>(R.id.editar_redsocialEditText)
 
+        val jsonObject = JSONObject()
+        jsonObject.put("id",idUsuario)
+        jsonObject.put("nombre",nombreEditText.text)
+        jsonObject.put("mail",emailEditText.text)
+        jsonObject.put("pass",passEditText.text)
+        jsonObject.put("rol",rolUsuario)
+        jsonObject.put("foto",fotoUrl )
+        jsonObject.put("redsocial",redsocialEditText.text)
+
+        val url = config.URL.plus("/api/user/"+idUsuario.toString() )
 
         val queue = Volley.newRequestQueue( this )
         val jsonObjectRequest = object: JsonObjectRequest( Request.Method.PUT, url,jsonObject,
 
             Response.Listener<JSONObject> { response ->
 
-                var strResp = response.toString()
                 getDatosUsuarioActualizados()
 
             },
@@ -302,7 +283,6 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         val url = config.URL.plus("/api/user/"+ idUsuario.toString() )
 
-
         val queue = Volley.newRequestQueue( this )
         val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
 
@@ -312,7 +292,8 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val jsonob: JSONObject = JSONObject(strResp)
 
                 datosUsuario =  jsonob.toString()
-                mensaje_Toast("Cambios realizados Exitosamente! ")
+
+                mensaje_Toast("Cambios Realizados Correctamente! ")
                 pantalla_login()
 
             },
@@ -338,7 +319,7 @@ class EditarActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
 }

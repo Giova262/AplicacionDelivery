@@ -12,24 +12,22 @@ import org.json.JSONObject
 
 class BolsadeProductosActivity : AppCompatActivity() {
 
-    var bolsaDeCompra = ArrayList<String>()
-    lateinit var datosUsuario:String
+    private var bolsaDeCompra = ArrayList<String>()
+    private lateinit var datosUsuario:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bolsade_productos)
 
-        //...................Recibo datos.......................
+        //----------------------- Recibo Datos -----------------------
 
         val objetoIntent : Intent =intent
         bolsaDeCompra = objetoIntent.getStringArrayListExtra("bolsa")
         datosUsuario = objetoIntent.getStringExtra("userData")
 
-
-        //...........................................................
+        //----------------------- Lleno List-View -----------------------
 
         fillList()
-
 
     }
 
@@ -37,10 +35,13 @@ class BolsadeProductosActivity : AppCompatActivity() {
         Toast.makeText( this,s, Toast.LENGTH_LONG).show()
     }
 
-
     private fun fillList() {
 
+        //----------------------- Obtengo Elemento -----------------------
+
         var listView = findViewById<ListView>(R.id.bolsa_listview)
+
+        //----------------------- Creo lista para el Adapter -----------------------
 
         val list = ArrayList<String>()
 
@@ -53,12 +54,18 @@ class BolsadeProductosActivity : AppCompatActivity() {
             list.add( value1 + "  -  "+ value0.toString() + "  Unidades" )
         }
 
+        //----------------------- Creo el Adapter -----------------------
+
         val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1, android.R.id.text1, list
         )
 
+        //----------------------- Seteo el Adapter -----------------------
+
         listView.setAdapter(adapter)
+
+        //----------------------- OnClick de cada Item en la ListView -----------------------
 
         listView.onItemClickListener = object : AdapterView.OnItemClickListener {
 
@@ -71,6 +78,7 @@ class BolsadeProductosActivity : AppCompatActivity() {
             }
         }
 
+        //----------------------- End -----------------------
 
     }
 

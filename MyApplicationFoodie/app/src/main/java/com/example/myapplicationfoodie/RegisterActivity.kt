@@ -31,7 +31,6 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
     private var storageReference: StorageReference? = null
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -40,8 +39,6 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
         var registrarBoton = findViewById<Button>(R.id.register_registrarButton)
         var elegirfotoBoton = findViewById<Button>(R.id.register_elegirfotoButton)
-       // var subirfotoBoton = findViewById<Button>(R.id.register_subirfotoButton)
-
         var imagen = findViewById<ImageView>(R.id.register_imageView)
 
         //----------------------- Foto por Defecto -----------------------
@@ -72,19 +69,11 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
         //.----------------------- Botones -----------------------
 
-        //subirfotoBoton.setEnabled(false)
-
         elegirfotoBoton?.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 chooseImage()
             }
         })
-
-       /* subirfotoBoton?.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-                uploadImage()
-            }
-        })*/
 
         registrarBoton?.setOnClickListener {
 
@@ -107,7 +96,6 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        //var subirfotoBoton = findViewById<Button>(R.id.register_subirfotoButton)
         var imagen = findViewById<ImageView>(R.id.register_imageView)
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK
@@ -119,11 +107,8 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 imagen?.setImageBitmap(bitmap)
-               // subirfotoBoton.setEnabled(true)
 
-                //----------------------- Cambio la fotoUrl a cualquier string que no sea Default -----------------------
-
-                fotoUrl = "No Default"
+                fotoUrl = "No Default"  //Cambio la fotoUrl a cualquier string que no sea Default
 
 
             } catch (e: IOException) {
@@ -172,14 +157,9 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
             })?.addOnCompleteListener { task ->
 
                 if (task.isSuccessful) {
+
                     val downloadUri = task.result
-
-                    //----------------------- URL Real en Fire-Base -----------------------
-
-                    fotoUrl = downloadUri.toString()
-
-                    //----------------------- Registro -----------------------
-
+                    fotoUrl = downloadUri.toString() // URL Real en Fire-Base
                     registerToServer()
 
                 } else {
@@ -192,16 +172,6 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
             mensaje_Toast("Error : No hay foto para Subir")
         }
-    }
-
-    private fun pantalla_loginDelivery() {
-        /*val intent:Intent = Intent(this,LoginActivity::class.java)
-        startActivity(intent)*/
-    }
-
-    private fun pantalla_loginCliente() {
-       /* val intent:Intent = Intent(this,LoginActivity::class.java)
-        startActivity(intent)*/
     }
 
     private fun pantalla_main() {

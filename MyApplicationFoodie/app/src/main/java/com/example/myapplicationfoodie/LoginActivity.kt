@@ -11,30 +11,26 @@ import com.android.volley.toolbox.Volley
 import com.facebook.login.LoginManager
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
-import java.io.IOException
 import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
-    var tokenUsario :String = "-1"
-    var idUsuario: Int = 0
-    lateinit var datosUsuario :JSONObject
+    private var tokenUsario :String = "-1"
+    private var idUsuario: Int = 0
+    private lateinit var datosUsuario :JSONObject
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        //.....................Recibo datos ....................................
+        //----------------------- Recibo Datos -----------------------
 
         val objetoIntent : Intent=intent
         datosUsuario = JSONObject( objetoIntent.getStringExtra("datos") )
         tokenUsario = objetoIntent.getStringExtra("token")
 
-
-        //.......................................................................
-
-        //...........Obtengo Elementos.............................................
+        //----------------------- Obtengo Elementos -----------------------
 
         var mensajeTextView = findViewById<TextView>(R.id.loginCliente_mensajeTextView)
         var nombreTextView = findViewById<TextView>(R.id.loginCliente_nombreTextView)
@@ -50,13 +46,9 @@ class LoginActivity : AppCompatActivity() {
         var editarBoton = findViewById<Button>(R.id.loginCliente_editarButton)
         var logoutBoton = findViewById<Button>(R.id.loginCliente_logoutButton)
 
-
-        //........................................................................
-
-        //................Muestro datos del cliente...............................
+        //----------------------- Datos del Cliente -----------------------
 
         idUsuario = datosUsuario.getInt("id")
-
 
         mensajeTextView.setText("Bienvenido! Elija Pedir para encontrar lo que buscas!")
         nombreTextView.setText( "Nombre: " + datosUsuario.getString("nombre"))
@@ -64,9 +56,7 @@ class LoginActivity : AppCompatActivity() {
         nivelTextView.setText( "Nivel: " + datosUsuario.getString("nivel"))
         puntajeTextView.setText( "Puntaje: " + datosUsuario.getString("puntaje"))
 
-
-        //...........................FOTO..............................................
-
+        //----------------------- Foto del Cliente -----------------------
 
         Picasso.get().load( datosUsuario.getString("foto") ).into(imagenTextView, object: com.squareup.picasso.Callback {
 
@@ -81,12 +71,11 @@ class LoginActivity : AppCompatActivity() {
                 }
         })
 
-
-        //....................Manejo de botones ..................................
+        //----------------------- Botones -----------------------
 
         pedirBoton?.setOnClickListener {
 
-            enviarDatosAlServidor(null)
+            getComerciosFromServidor()
         }
 
         logoutBoton?.setOnClickListener {
@@ -119,56 +108,57 @@ class LoginActivity : AppCompatActivity() {
         intent.putExtra("iduser",idUsuario)
         intent.putExtra("token",tokenUsario)
         intent.putExtra("userData",datosUsuario.toString())
+
         startActivity(intent)
     }
 
     private fun pantalla_historial() {
+
         val intent:Intent = Intent(this,HistorialActivity::class.java)
 
-        //intent.putExtra("userData",datosUsuario.toString())
         intent.putExtra("iduser",idUsuario)
         intent.putExtra("token",tokenUsario)
+
         startActivity(intent)
     }
 
     private fun pantalla_pendientes() {
+
         val intent:Intent = Intent(this,PendientesActivity::class.java)
 
-        //intent.putExtra("userData",datosUsuario.toString())
         intent.putExtra("iduser",idUsuario)
         intent.putExtra("token",tokenUsario)
         intent.putExtra("datos",datosUsuario.toString())
-        startActivity(intent)
-        //finish()
-    }
 
+        startActivity(intent)
+    }
 
     private fun mensaje_Toast(s: String) {
         Toast.makeText( this,s, Toast.LENGTH_LONG).show()
     }
 
     private fun pantalla_main() {
+
         val intent:Intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
         finish()
     }
 
     private fun pantalla_pedir( comercios :String ) {
+
         val intent:Intent = Intent(this,ComercioActivity::class.java)
+
         intent.putExtra("datos",comercios)
         intent.putExtra("iduser",idUsuario)
         intent.putExtra("token",tokenUsario)
         intent.putExtra("userData",datosUsuario.toString())
 
         startActivity(intent)
-        finish()
     }
 
-    private fun enviarDatosAlServidor(jsonObject: JSONObject?) {
-
+    private fun getComerciosFromServidor() {
 
         val url = config.URL.plus("/api/comercio/all")
-
 
         val queue = Volley.newRequestQueue( this )
         val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
@@ -180,7 +170,6 @@ class LoginActivity : AppCompatActivity() {
                 var comercios= jsonob.getJSONArray("data")
 
                 pantalla_pedir(comercios.toString())
-
 
             },
             Response.ErrorListener {  })

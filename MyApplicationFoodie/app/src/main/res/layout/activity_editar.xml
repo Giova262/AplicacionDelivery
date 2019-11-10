@@ -172,45 +172,22 @@
                 android:layout_marginLeft="5dp"
                 app:srcCompat="@android:drawable/alert_dark_frame" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
+            <Button
+                android:id="@+id/editar_elegirbutton"
+                android:layout_width="119dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/buttonshape"
+                android:paddingVertical="5dp"
+                android:shadowColor="#A8A8A8"
+                android:shadowDx="0.1"
+                android:shadowDy="0.1"
+                android:shadowRadius="5"
+                android:text="Elegir foto"
+                android:textColor="#FFFFFFFF"
+                android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/editar_elegirbutton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="40dp"
-                    android:layout_marginVertical="5dp"
-                    android:background="@drawable/buttonshape"
-                    android:paddingVertical="5dp"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0.1"
-                    android:shadowDy="0.1"
-                    android:shadowRadius="5"
-                    android:text="Elegir foto"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="10sp" />
-
-                <Button
-                    android:id="@+id/editar_subirbutton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Subir foto"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="10sp"
-                    android:background="@drawable/buttonshape"
-                    android:shadowColor="#A8A8A8"
-                    android:shadowDx="0.1"
-                    android:shadowDy="0.1"
-                    android:shadowRadius="5"
-                    android:paddingVertical="5dp"
-                    android:layout_marginHorizontal="40dp"
-                    android:layout_marginVertical="5dp" />
-            </LinearLayout>
         </LinearLayout>
 
         <Button
