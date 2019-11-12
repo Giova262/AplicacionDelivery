@@ -36,7 +36,6 @@ class PedidoDescActivity : AppCompatActivity() {
 
         val usuarioDatos =JSONObject(datosUsuario)
         idUsuario = usuarioDatos.getInt("id")
-        mensaje_Toast(idUsuario.toString())
 
         //----------------------- Obtengo Elementos -----------------------
 
@@ -99,7 +98,7 @@ class PedidoDescActivity : AppCompatActivity() {
 
                 /* NOTIFICAR AL CLIENTE QUE SU PEDIDO FUE TOMADO! ACA  !*/
 
-                mensaje_Toast(strResp)
+                //mensaje_Toast(strResp)
 
                 val intent:Intent = Intent(this,LoginDeliveryActivity::class.java)
 

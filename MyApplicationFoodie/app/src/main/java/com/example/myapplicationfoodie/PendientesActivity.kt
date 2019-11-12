@@ -20,6 +20,7 @@ class PendientesActivity : AppCompatActivity() {
     private var tokenUsario :String = "-1"
     private var idUsuario: Int = 0
     private lateinit var pendientes: JSONArray
+    private lateinit var pendientesNoEntregados: JSONArray
     private var datosUsuario :String = "-1"
 
 
@@ -88,24 +89,35 @@ class PendientesActivity : AppCompatActivity() {
         var listView = findViewById<ListView>(R.id.pendientes_listview)
 
         val list = ArrayList<String>()
+        val list2 = ArrayList<JSONObject>()
 
-        var mensaje:String
-
-        for (i in 0 until pendientes.length()) {
+       for (i in 0 until pendientes.length()){
 
             val jsonObject1 = pendientes.getJSONObject(i)
+            if( jsonObject1.getInt("ped_estado") != 3 ){
+                list2.add( jsonObject1  )
+            }
+        }
+
+        pendientesNoEntregados = JSONArray(list2)
+
+        var mensaje:String = "Empty"
+
+        for (i in 0 until pendientesNoEntregados.length()) {
+
+            val jsonObject1 = pendientesNoEntregados.getJSONObject(i)
             val value1 = jsonObject1.getInt("ped_id")
             val value2 = jsonObject1.getInt("ped_deliveryid")
             val value3 = jsonObject1.getInt("ped_estado")
 
             if(value3==1){
-                 mensaje = "IdPedido: ${value1} IdDelivery: ${value2} Estado: Pendiente"
-
-            }else{
-                 mensaje = "IdPedido: ${value1} IdDelivery: ${value2} Estado: Enviando"
+                mensaje = "IdPedido: ${value1} IdDelivery: ${value2} Estado: Pendiente"
+            }else if(value3==2){
+                mensaje = "IdPedido: ${value1} IdDelivery: ${value2} Estado: Enviando"
             }
 
             list.add(mensaje)
+
         }
 
         val adapter = ArrayAdapter(
@@ -123,7 +135,8 @@ class PendientesActivity : AppCompatActivity() {
             ) {
 
                 //--------------------- OnClick de cada Item ---------------------
-                val jsonObject1 = pendientes.getJSONObject(position)
+
+                val jsonObject1 = pendientesNoEntregados.getJSONObject(position)
                 pantalla_mipedidoopciones(jsonObject1.toString())
 
             }

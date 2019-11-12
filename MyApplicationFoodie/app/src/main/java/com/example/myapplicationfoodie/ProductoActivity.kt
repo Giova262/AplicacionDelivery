@@ -115,7 +115,7 @@ class ProductoActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     latFinal = address.get(0).getLatitude()
                     longFinal = address.get(0).getLongitude()
-                    
+
                     var sydney = LatLng(latFinal, longFinal)
                     val zoomLevel = 16.0f //This goes up to 21
 
