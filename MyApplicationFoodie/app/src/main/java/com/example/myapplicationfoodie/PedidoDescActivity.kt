@@ -98,7 +98,7 @@ class PedidoDescActivity : AppCompatActivity() {
 
                 /* NOTIFICAR AL CLIENTE QUE SU PEDIDO FUE TOMADO! ACA  !*/
 
-                //mensaje_Toast(strResp)
+
 
                 val intent:Intent = Intent(this,LoginDeliveryActivity::class.java)
 

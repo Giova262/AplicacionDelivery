@@ -9,7 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.facebook.login.LoginManager
@@ -227,35 +226,34 @@ class LoginDeliveryActivity : AppCompatActivity() {
 
     private fun consultarPedidosPendientes() {
 
-        val url = config.URL.plus("/api/pedido/getPedidosPendientesParaDelivery/")
+        //ESTA HARCODEADO LA LATITUD Y LONGITUD
 
-        //--------------------------ESTA HARDCODEADO-----------------------------------
-                    // Buscar como obtener lat y long desde el telefono
-        val jsonObject2 = JSONObject()
-        jsonObject2.put("lati",-45.1)
-        jsonObject2.put("longi",-50.1)
+        val url = config.URL.plus("/api/pedido/getPedidosPendientesParaDelivery/-35.25&-30.66")
+
+
         //------------------------------------------------------------------------------
 
         val queue = Volley.newRequestQueue( this )
-        val jsonObjectRequest = object: JsonObjectRequest( Request.Method.GET, url,jsonObject2,
+        val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
 
-            Response.Listener<JSONObject> { response ->
+            Response.Listener<String> { response ->
 
                 var strResp = response.toString()
-
                 val jsonob: JSONObject = JSONObject(strResp)
-                var pedidos= jsonob.getJSONArray("pedidos")
+                var pedidos= jsonob.getJSONArray("pedidoscercanos")
 
                 pantalla_pedidos_pendientes(pedidos.toString())
             },
-            Response.ErrorListener {  })
+            Response.ErrorListener {
+                mensaje_Toast("Error en respuesta servidor")
+            })
 
         {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Basic <<YOUR BASE64 USER:PASS>>"
                 headers["Content-Type"] = "application/json; charset=UTF-8"
-                headers["token"] = tokenUsario;
+                headers["token"] = tokenUsario
 
                 return headers
             }

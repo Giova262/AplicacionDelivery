@@ -179,7 +179,7 @@ class LoginActivity : AppCompatActivity() {
                 val headers = HashMap<String, String>()
                 headers["Authorization"] = "Basic <<YOUR BASE64 USER:PASS>>"
                 headers["Content-Type"] = "application/json; charset=UTF-8"
-                headers["token"] = tokenUsario;
+                headers["token"] = tokenUsario
 
                 return headers
             }
