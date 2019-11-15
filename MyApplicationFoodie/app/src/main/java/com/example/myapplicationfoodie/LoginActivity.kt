@@ -158,7 +158,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun getComerciosFromServidor() {
 
-        val url = config.URL.plus("/api/comercio/all")
+        val url = config.URL.plus("/api/comercio/")
 
         val queue = Volley.newRequestQueue( this )
         val jsonObjectRequest = object: StringRequest( Request.Method.GET, url,
