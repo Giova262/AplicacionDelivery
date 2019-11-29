@@ -118,6 +118,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
         val url = config.URL.plus("/api/user/login")
 
+        mensaje_Toast(config.URL)
+
         //----------------------- Send data to Server -----------------------
 
         val queue = Volley.newRequestQueue( this )
