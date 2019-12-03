@@ -35,51 +35,39 @@
         <ListView
             android:id="@+id/producto_listview"
             android:layout_width="420dp"
-            android:layout_height="216dp" />
+            android:layout_height="324dp" />
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
+        <Button
+            android:id="@+id/producto_confirmarButton"
             android:layout_width="match_parent"
-            android:layout_height="258dp"
-            android:paddingHorizontal="10dp" />
+            android:layout_height="wrap_content"
+            android:text="Confirmar Pedido"
+            android:textColor="#FFFFFFFF"
+            android:textSize="30sp"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0.1"
+            android:shadowDy="0.1"
+            android:shadowRadius="5"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/producto_verbolsaButton"
             android:layout_width="match_parent"
-            android:layout_height="71dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/producto_confirmarButton"
-                android:layout_width="136dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/buttonshape"
-                android:shadowColor="#A8A8A8"
-                android:shadowDx="0.1"
-                android:shadowDy="0.1"
-                android:shadowRadius="5"
-                android:text="Enviar"
-                android:textColor="#FFFFFFFF"
-                android:textSize="15dp" />
-
-            <Button
-                android:id="@+id/producto_verbolsaButton"
-                android:layout_width="154dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/buttonshape"
-                android:shadowColor="#A8A8A8"
-                android:shadowDx="0.1"
-                android:shadowDy="0.1"
-                android:shadowRadius="5"
-                android:text="Ver bolsa"
-                android:textColor="#FFFFFFFF"
-                android:textSize="15dp" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="Ver bolsa"
+            android:textColor="#FFFFFFFF"
+            android:textSize="30sp"
+            android:background="@drawable/buttonshape"
+            android:shadowColor="#A8A8A8"
+            android:shadowDx="0.1"
+            android:shadowDy="0.1"
+            android:shadowRadius="5"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp" />
     </LinearLayout>
 
 

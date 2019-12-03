@@ -2,7 +2,6 @@ package com.example.myapplicationfoodie
 
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,18 +14,10 @@ import org.json.JSONObject
 import android.widget.AdapterView.OnItemClickListener
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
-import android.os.Build
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -34,9 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import org.json.JSONArray
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.android.synthetic.main.activity_producto.*
 
 
@@ -93,22 +82,22 @@ class ProductoActivity : AppCompatActivity(), OnMapReadyCallback {
 
         var verBolsaButton = findViewById<Button>(R.id.producto_verbolsaButton)
         var confirmarButton = findViewById<Button>(R.id.producto_confirmarButton)
-        var mapa = findViewById<MapView>(R.id.mapView)
+       // var mapa = findViewById<MapView>(R.id.mapView)
 
         var mapViewBundle: Bundle? = null
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY)
         }
 
-        mapa.onCreate(mapViewBundle)
-        mapa.getMapAsync(this)
+        //mapa.onCreate(mapViewBundle)
+        //mapa.getMapAsync(this)
 
         var direccionEdittext = findViewById<EditText>(R.id.producto_direccionEditText)
         direccionEdittext.addTextChangedListener( object:  TextWatcher {
 
             override fun afterTextChanged(s: Editable?) {
 
-                var direccionString = direccionEdittext.text
+               /* var direccionString = direccionEdittext.text
                 var address:List<Address> = coder.getFromLocationName( direccionString.toString() ,5)
 
                 if (address.isNotEmpty()) {
@@ -122,7 +111,7 @@ class ProductoActivity : AppCompatActivity(), OnMapReadyCallback {
                     mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney").draggable(true))
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, zoomLevel))
 
-                }
+                }*/
 
             }
 
@@ -347,7 +336,13 @@ class ProductoActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
 
+        mensaje_Toast("Entre en onmapready")
+
+
         mMap = googleMap
+
+
+        mensaje_Toast( mMap.toString())
 
         var sydney = LatLng(-34.0, 151.0)
         val zoomLevel = 16.0f //This goes up to 21
@@ -355,11 +350,12 @@ class ProductoActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(sydney).title("Tu Direccion").draggable(true))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, zoomLevel))
 
+
     }
 
     override fun onStart() {
         super.onStart()
-        mapView.onStart()
+        //mapView.onStart()
     }
 
     public override fun onSaveInstanceState(outState: Bundle) {
@@ -371,18 +367,9 @@ class ProductoActivity : AppCompatActivity(), OnMapReadyCallback {
             outState.putBundle(MAP_VIEW_BUNDLE_KEY, mapViewBundle)
         }
 
-        mapView.onSaveInstanceState(mapViewBundle)
+        //mapView.onSaveInstanceState(mapViewBundle)
     }
 
 
 }
-
-
-
-
-
-
-
-
-
 
