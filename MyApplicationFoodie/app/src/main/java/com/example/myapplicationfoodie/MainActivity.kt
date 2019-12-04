@@ -83,6 +83,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
             jsonObject.put("idToken",uidfirebase)
 
             loginToServer(jsonObject)
+
+           /* val intent:Intent = Intent(this,chat2Activity::class.java)
+            startActivity(intent)
+            finish()*/
         }
 
         buttonRegistrar?.setOnClickListener {
@@ -118,7 +122,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
         val url = config.URL.plus("/api/user/login")
 
-        mensaje_Toast(config.URL)
+       // mensaje_Toast(config.URL)
 
         //----------------------- Send data to Server -----------------------
 

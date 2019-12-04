@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.myapplicationfoodie">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -20,8 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ChatActivity"></activity>
-        <activity android:name=".TestMain2Activity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -37,6 +37,7 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+
         <activity android:name=".PedidoOpcionesDeliveryActivity" />
         <activity android:name=".PedidoOpcionesClienteActivity" />
         <activity android:name=".PruebasActivity" />

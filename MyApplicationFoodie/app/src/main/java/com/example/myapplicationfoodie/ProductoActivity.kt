@@ -162,7 +162,7 @@ class ProductoActivity : AppCompatActivity(), OnMapReadyCallback {
 
             //----------------------- Obtengo Lat/Long con GeoLocation -----------------------
 
-            var address:List<Address> = coder.getFromLocationName( direccionString.toString() ,5)
+            var address:List<Address> = coder?.getFromLocationName( direccionString.toString() ,5)
 
             if (address.isNotEmpty()) {
 
