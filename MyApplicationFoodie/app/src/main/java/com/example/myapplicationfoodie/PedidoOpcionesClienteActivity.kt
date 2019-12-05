@@ -82,16 +82,14 @@ class PedidoOpcionesClienteActivity : AppCompatActivity() {
 
     private fun performRegister(){
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword("giovamcgg@fiuba.com","contra")
-            .addOnCompleteListener{
-                if( !it.isSuccessful ) return@addOnCompleteListener
+        val intent:Intent = Intent(this,ChatLogActivity::class.java)
 
-                Log.d("Main","Exitoso al crear al usuario: ${it.result?.user?.uid}")
-            }
-            .addOnFailureListener {
+        intent.putExtra("token",tokenUsario)
+        intent.putExtra("pedido",pedido)
+        intent.putExtra("datos",datosUsuario)
 
-                Log.d("Main","Error al crear al usuario: ${it.message}")
-            }
+        startActivity(intent)
+
     }
 
     private fun confirmarRecibiPedido() {

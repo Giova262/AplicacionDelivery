@@ -28,9 +28,11 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
     private var filePath: Uri? = null
     private val PICK_IMAGE_REQUEST = 71
     private var fotoUrl:String = "defecto"
+    private var uidfirebase:String = "-1"
     private var rolUsuario: Int = -1
     private var storage: FirebaseStorage? = null
     private var storageReference: StorageReference? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,8 +81,6 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
         registrarBoton?.setOnClickListener {
 
-            if( !fotoUrl.equals("defecto")){
-
 
                 var passEditText = findViewById<EditText>( R.id.register_passEditText )
                 var emailEditText = findViewById<EditText>( R.id.register_emailEditText )
@@ -89,9 +89,17 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword( emailEditText.text.toString() , passEditText.text.toString() )
                     .addOnCompleteListener{
+
+
                         if( !it.isSuccessful ) return@addOnCompleteListener
 
-                        uploadImage()
+                        uidfirebase = it.result?.user?.uid.toString()
+
+                        if( !fotoUrl.equals("defecto")){
+                            uploadImage()
+                        }else{
+                            registerToServer()
+                        }
 
                         Log.d("Main","Exitoso al crear al usuario: ${it.result?.user?.uid}")
                     }
@@ -101,11 +109,6 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
                         Log.d("Main","Error al crear al usuario: ${it.message}")
                     }
 
-
-
-            }else{
-                registerToServer()
-            }
         }
     }
 
@@ -217,7 +220,7 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         var passEditText = findViewById<EditText>( R.id.register_passEditText )
         var emailEditText = findViewById<EditText>( R.id.register_emailEditText )
 
-        
+
         //-----------------------  Creo el Json -----------------------
 
         val jsonObject1 = JSONObject()
@@ -230,7 +233,7 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         jsonObject1.put("foto",fotoUrl)
         jsonObject1.put("cantEnvios",0)
         jsonObject1.put("redsocial","Ninguna")
-        jsonObject1.put("uidfirebase","-1")
+        jsonObject1.put("uidfirebase",uidfirebase)
 
 
         //----------------------- Coneccion con Servidor -----------------------
