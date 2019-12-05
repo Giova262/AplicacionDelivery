@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.*
 import com.android.volley.toolbox.JsonObjectRequest
@@ -14,6 +15,7 @@ import com.android.volley.toolbox.Volley
 import com.android.volley.Response
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -78,7 +80,28 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         registrarBoton?.setOnClickListener {
 
             if( !fotoUrl.equals("defecto")){
-                uploadImage()
+
+
+                var passEditText = findViewById<EditText>( R.id.register_passEditText )
+                var emailEditText = findViewById<EditText>( R.id.register_emailEditText )
+
+                //--------------------- Creo en fire base el usuario tambien ---------------
+
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword( emailEditText.text.toString() , passEditText.text.toString() )
+                    .addOnCompleteListener{
+                        if( !it.isSuccessful ) return@addOnCompleteListener
+
+                        uploadImage()
+
+                        Log.d("Main","Exitoso al crear al usuario: ${it.result?.user?.uid}")
+                    }
+                    .addOnFailureListener {
+
+                        mensaje_Toast("El mail debe tener un formato correcto @gmail.com por ejemplo.")
+                        Log.d("Main","Error al crear al usuario: ${it.message}")
+                    }
+
+
 
             }else{
                 registerToServer()
@@ -186,12 +209,15 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
 
     private fun registerToServer() {
 
+
+
         //----------------------- Obtengo Elementos -----------------------
 
         var nombreEditText = findViewById<EditText>( R.id.register_nombreEditText )
         var passEditText = findViewById<EditText>( R.id.register_passEditText )
         var emailEditText = findViewById<EditText>( R.id.register_emailEditText )
 
+        
         //-----------------------  Creo el Json -----------------------
 
         val jsonObject1 = JSONObject()
@@ -210,30 +236,36 @@ class RegisterActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener
         //----------------------- Coneccion con Servidor -----------------------
 
 
-        val queue = Volley.newRequestQueue( this )
 
-        val url = config.URL.plus("/api/user/register")
+            val queue = Volley.newRequestQueue( this )
 
-        val jsonObjectRequest = JsonObjectRequest(url, jsonObject1,
+            val url = config.URL.plus("/api/user/register")
 
-            Response.Listener { response ->
+            val jsonObjectRequest = JsonObjectRequest(url, jsonObject1,
 
-                var strResp = response.toString()
-                val jsonob: JSONObject = JSONObject(strResp)
-                val mensaje = jsonob.getString("message")
+                Response.Listener { response ->
 
-                mensaje_Toast(mensaje)
+                    var strResp = response.toString()
+                    val jsonob: JSONObject = JSONObject(strResp)
+                    val mensaje = jsonob.getString("message")
 
-                pantalla_main()
+                    mensaje_Toast(mensaje)
 
-            },
-            Response.ErrorListener { error ->
+                    pantalla_main()
 
-                error.printStackTrace()
-            }
-        )
+                },
+                Response.ErrorListener { error ->
 
-        queue.add( jsonObjectRequest )
+                    error.printStackTrace()
+                }
+            )
+
+            queue.add( jsonObjectRequest )
+
+
+
+
+
 
     }
 

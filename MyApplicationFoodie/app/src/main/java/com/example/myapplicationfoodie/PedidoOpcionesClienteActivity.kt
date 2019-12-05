@@ -3,12 +3,14 @@ package com.example.myapplicationfoodie
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.google.firebase.auth.FirebaseAuth
 import org.json.JSONObject
 
 class PedidoOpcionesClienteActivity : AppCompatActivity() {
@@ -69,11 +71,27 @@ class PedidoOpcionesClienteActivity : AppCompatActivity() {
 
             var estado = pedidoObj.getInt("ped_estado")
             if( estado == 2 ){
-                //confirmarRecibiPedido()
+
+                performRegister()
+
             }else mensaje_Toast("Tu pedido esta Pendiente, No hay delivery para iniciar el Chat")
         }
 
 
+    }
+
+    private fun performRegister(){
+
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword("giovamcgg@fiuba.com","contra")
+            .addOnCompleteListener{
+                if( !it.isSuccessful ) return@addOnCompleteListener
+
+                Log.d("Main","Exitoso al crear al usuario: ${it.result?.user?.uid}")
+            }
+            .addOnFailureListener {
+
+                Log.d("Main","Error al crear al usuario: ${it.message}")
+            }
     }
 
     private fun confirmarRecibiPedido() {
