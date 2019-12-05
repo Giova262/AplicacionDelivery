@@ -101,7 +101,10 @@ class ChatLogActivity : AppCompatActivity(){
         ListenforMessages()
 
         enviar_boton_chat_log.setOnClickListener {
+
+
             preformSendMessage()
+
         }
 
     }
@@ -119,7 +122,8 @@ class ChatLogActivity : AppCompatActivity(){
 
                     if(chatmessage.fromId == usuarioUid ){
                         adapter.add( ChatFromItem(chatmessage.text)  )
-                    }else{
+
+                    }else if(chatmessage.fromId == deliveryUid){
                         adapter.add( ChatToItem(chatmessage.text)  )
                     }
                 }
@@ -160,6 +164,8 @@ class ChatLogActivity : AppCompatActivity(){
         reference.setValue(chatMessage)
             .addOnSuccessListener {
                  Log.d("Main","Envie el mensaje a firebase")
+                edittext_chat_log.text.clear()
+                recyclerview_chat_log.scrollToPosition( adapter.itemCount - 1 )
             }
     }
 

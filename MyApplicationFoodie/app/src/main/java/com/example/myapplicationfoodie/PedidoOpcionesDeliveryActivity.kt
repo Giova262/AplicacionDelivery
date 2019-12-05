@@ -48,6 +48,22 @@ class PedidoOpcionesDeliveryActivity : AppCompatActivity() {
             pantalla_mapa( )
         }
 
+        chatBoton?.setOnClickListener {
+            performRegister( )
+        }
+
+    }
+
+    private fun performRegister(){
+
+        val intent:Intent = Intent(this,ChatLogActivity::class.java)
+
+        intent.putExtra("token",tokenUsario)
+        intent.putExtra("pedido",pedido)
+        intent.putExtra("datos",datosUsuario)
+
+        startActivity(intent)
+
     }
 
     private fun mensaje_Toast(s: String) {
