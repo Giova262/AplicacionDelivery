@@ -30,6 +30,7 @@ class ChatLogActivity : AppCompatActivity(){
     private var pedido: String = ""
     private var deliveryUid: String = ""
     private var usuarioUid: String = ""
+    private var rol = -1
 
     var adapter = GroupAdapter<GroupieViewHolder>()
 
@@ -39,6 +40,8 @@ class ChatLogActivity : AppCompatActivity(){
         setContentView(R.layout.activity_chat_log)
 
         recyclerview_chat_log.adapter = adapter
+
+        recyclerview_chat_log.scrollToPosition( adapter.itemCount - 1 )
 
         //----------------------- Recibo Datos -----------------------
 
@@ -51,11 +54,22 @@ class ChatLogActivity : AppCompatActivity(){
 
         var cliente = JSONObject(datosUsuario)
         usuarioUid = cliente.getString("uidfirebase")
+        rol = cliente.getInt("rol")
 
         //------------------------------------------------------------
 
         var pedidoObj = JSONObject(pedido)
-        val delivertId = pedidoObj.getInt("ped_deliveryid")
+
+        var delivertId = -1
+
+        if(rol==0){
+            delivertId = pedidoObj.getInt("ped_deliveryid")
+        }
+
+        if(rol==1){
+            delivertId = pedidoObj.getInt("ped_userid")
+        }
+
 
         val url = config.URL.plus("/api/user/"+ delivertId.toString() )
 
@@ -68,7 +82,7 @@ class ChatLogActivity : AppCompatActivity(){
             Response.Listener<String> { response ->
 
                 val jsonob: JSONObject = JSONObject(response.toString())
-                mensaje_Toast(response.toString())
+               // mensaje_Toast(response.toString())
 
                 deliveryUid = jsonob.getString("uidfirebase")
 
@@ -120,12 +134,14 @@ class ChatLogActivity : AppCompatActivity(){
 
                 if(chatmessage!= null){
 
-                    if(chatmessage.fromId == usuarioUid ){
-                        adapter.add( ChatFromItem(chatmessage.text)  )
 
-                    }else if(chatmessage.fromId == deliveryUid){
-                        adapter.add( ChatToItem(chatmessage.text)  )
-                    }
+                        if(chatmessage.fromId == usuarioUid ){
+                            adapter.add( ChatFromItem(chatmessage.text)  )
+
+                        }else{
+                            adapter.add( ChatToItem(chatmessage.text)  )
+                        }
+
                 }
 
 

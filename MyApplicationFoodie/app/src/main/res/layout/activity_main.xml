@@ -56,7 +56,7 @@
             android:inputType="textEmailAddress"
             android:textColorHint="#5A5858"
             android:textColor="#0E0D0D"
-            android:text="josue@" />
+            android:text="josue@gmail.com" />
 
         <EditText
             android:id="@+id/main_passEditText"
