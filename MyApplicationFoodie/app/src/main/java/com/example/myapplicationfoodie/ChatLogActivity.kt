@@ -39,9 +39,7 @@ class ChatLogActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        recyclerview_chat_log.adapter = adapter
 
-        recyclerview_chat_log.scrollToPosition( adapter.itemCount - 1 )
 
         //----------------------- Recibo Datos -----------------------
 
@@ -110,9 +108,11 @@ class ChatLogActivity : AppCompatActivity(){
 
         supportActionBar?.title = " Chat Log "
 
-        //setupDummyData()
-
         ListenforMessages()
+
+        recyclerview_chat_log.adapter = adapter
+
+        recyclerview_chat_log.scrollToPosition( adapter.itemCount - 1 )
 
         enviar_boton_chat_log.setOnClickListener {
 
@@ -160,6 +160,8 @@ class ChatLogActivity : AppCompatActivity(){
 
             }
         })
+
+
     }
 
     class ChatMessage(val id:String, val text : String ,val fromId:String , val toId:String , val timestamp: Long ){
