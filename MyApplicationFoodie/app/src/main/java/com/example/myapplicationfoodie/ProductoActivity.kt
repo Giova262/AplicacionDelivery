@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import org.json.JSONArray
+import java.lang.Error
 
 
 class ProductoActivity : AppCompatActivity() {
@@ -113,7 +114,17 @@ class ProductoActivity : AppCompatActivity() {
 
             //----------------------- Obtengo Lat/Long con GeoLocation -----------------------
 
-            var address:List<Address> = coder?.getFromLocationName( direccionString.toString() ,5)
+            var address:List<Address> = emptyList()
+
+            try {
+
+                 address = coder?.getFromLocationName( direccionString.toString() ,5)
+
+            }catch (e:Error ){
+                mensaje_Toast("Fallo en obtener la localizacion de tu direccion ")
+            }
+
+
 
             if (address.isNotEmpty()) {
 
