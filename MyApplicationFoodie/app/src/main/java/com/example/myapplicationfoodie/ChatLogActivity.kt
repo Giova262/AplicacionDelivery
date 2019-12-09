@@ -30,6 +30,7 @@ class ChatLogActivity : AppCompatActivity(){
     private var pedido: String = ""
     private var deliveryUid: String = ""
     private var usuarioUid: String = ""
+    private var idpedido: Int = 0
     private var rol = -1
 
     var adapter = GroupAdapter<GroupieViewHolder>()
@@ -57,6 +58,8 @@ class ChatLogActivity : AppCompatActivity(){
         //------------------------------------------------------------
 
         var pedidoObj = JSONObject(pedido)
+
+        idpedido = pedidoObj.getInt("ped_id")
 
         var delivertId = -1
 
@@ -104,7 +107,7 @@ class ChatLogActivity : AppCompatActivity(){
         queue.add(jsonObjectRequest)
 
 
-        //--------------- Botones ----------------------------------------------
+
 
         supportActionBar?.title = " Chat Log "
 
@@ -113,6 +116,8 @@ class ChatLogActivity : AppCompatActivity(){
         recyclerview_chat_log.adapter = adapter
 
         recyclerview_chat_log.scrollToPosition( adapter.itemCount - 1 )
+
+        //--------------- Botones ----------------------------------------------
 
         enviar_boton_chat_log.setOnClickListener {
 
@@ -134,6 +139,8 @@ class ChatLogActivity : AppCompatActivity(){
 
                 if(chatmessage!= null){
 
+                    if( chatmessage.idpedido == idpedido ){
+
 
                         if(chatmessage.fromId == usuarioUid ){
                             adapter.add( ChatFromItem(chatmessage.text)  )
@@ -141,6 +148,10 @@ class ChatLogActivity : AppCompatActivity(){
                         }else{
                             adapter.add( ChatToItem(chatmessage.text)  )
                         }
+
+                    }
+
+
 
                 }
 
@@ -164,8 +175,8 @@ class ChatLogActivity : AppCompatActivity(){
 
     }
 
-    class ChatMessage(val id:String, val text : String ,val fromId:String , val toId:String , val timestamp: Long ){
-        constructor() :this( "","","","",-1)
+    class ChatMessage(val id:String, val text : String ,val fromId:String , val toId:String , val timestamp: Long , val idpedido: Int ){
+        constructor() :this( "","","","",-1, 0)
     }
 
     private fun preformSendMessage(){
@@ -177,7 +188,7 @@ class ChatLogActivity : AppCompatActivity(){
 
         val reference = FirebaseDatabase.getInstance().getReference("/messages").push()
 
-        val chatMessage = ChatMessage(reference.key!! ,text,usuarioUid!! ,deliveryUid,System.currentTimeMillis())
+        val chatMessage = ChatMessage(reference.key!! ,text,usuarioUid!! ,deliveryUid,System.currentTimeMillis(),idpedido)
 
         reference.setValue(chatMessage)
             .addOnSuccessListener {
