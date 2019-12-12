@@ -34,7 +34,8 @@ class ProductoActivity : AppCompatActivity() {
     private lateinit var datosUsuario:String
     private var bolsaDeCompra = ArrayList<String>()
     private lateinit var productos :JSONArray
-    private var coder = Geocoder(this)
+    lateinit var coder:Geocoder
+    //private var coder = Geocoder(this)
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
@@ -42,6 +43,8 @@ class ProductoActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_producto)
+
+        coder = Geocoder(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
